@@ -29,6 +29,11 @@ The sections below walk through installing prerequisites, opening the project in
    ```bash
    pip install -r test/requirements.txt
    ```
+5. If you plan to use the Eightfold custom field scraper, install Playwright and its Chromium browser once inside the virtual environment:
+   ```bash
+   pip install playwright
+   playwright install chromium
+   ```
 
 > **Tip:** If you ever need to update dependencies in the future, re-run the `pip install` command after activating the virtual environment.
 
@@ -158,6 +163,23 @@ python report_workflow_id_mappings.py \
   ```
 
 ---
+
+## 7. Scraping Eightfold custom fields
+
+The repository now includes `custom_fields_scraper.py`, a helper that exports the field names and IDs from the Eightfold Custom Fields integration page. The script automates pagination and writes the results to a CSV file.
+
+### Usage
+
+1. Ensure Playwright is installed (see step 5 above) and activate your virtual environment.
+2. Run the scraper, passing the tenant subdomain (the `app-wu` portion of the URL) and an optional output filename:
+   ```bash
+   python custom_fields_scraper.py --subdomain app-wu --output my_fields.csv
+   ```
+3. When prompted, enter the Eightfold username and password that have access to the integrations console. Credentials are requested at runtime so they are not stored in the repository or shell history.
+4. The script launches a Chromium browser, signs in, iterates through every page of results, and saves the output CSV.
+
+> Tip: For troubleshooting (for example, to confirm the correct login selectors for your tenant), append `--headed` to watch the automated session. Use `--headless` if you want to force headless mode explicitly.
+
 
 ## 7. Quick reference
 
