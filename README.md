@@ -1,11 +1,15 @@
 # Workflow ID Sync Utilities
 
-This repository contains two small Python scripts that help reconcile form and question IDs between environments when migrating configuration data. Both scripts work with the JSON exports produced by your platform.
+This repository contains some small Python scripts that help reconcile form and question IDs between environments when migrating configuration data. Both scripts work with the raw JSON from config.
 
-- `form_and_question_id_updater.py` — Updates form/question IDs across workflow-style JSON, including IDs embedded inside strings such as templated headers.
-- `report_workflow_id_mappings.py` — Produces CSV-style tables summarising every form and question mapping, which you can use for manual VLOOKUPs or spot checks.
+- `form_and_question_id_updater.py` — Updates form/question IDs across JSON, including IDs embedded inside strings such as templated headers.
+- `report_workflow_id_mappings.py` — Produces CSV tables summarising every form and question mapping, which you can use for manual VLOOKUPs or spot checks.
+- `custom_fields_scraper.py`, Exports the field names and IDs from the Eightfold Custom Fields integration page. The script automates pagination and writes the results to a CSV file.  Needs login info (pass as variables DO NOT store in file) and confirm EF URL - for both source and target (run twice, inform script of the desired output name, the next script below uses those outputs so probably stick with "source.csv" and "target.csv")
+- `custom_field_id_updater.py` Rewrites the `custom_field_id` values embedded in a JSON configuration. It compares the legacy IDs from a "source" CSV to the replacement IDs in a "target" CSV, then walks the target profile JSON and swaps anything it recognises.
 
 The sections below walk through installing prerequisites, opening the project in Visual Studio Code, and running each script with new exports.
+
+This was originally built based on Pipeline and Worflow (workflow_config) migration so there are a lot of references to "workflow" in the files and code but this should only need the raw JSON - it does need to be named "target_workflow_config.json" unless you pass alternatives to the script or update the script.
 
 ---
 
@@ -63,7 +67,7 @@ Each run of the scripts consumes five JSON files:
 | `target_forms_library.json` | Forms from the destination environment (e.g. Production Dry Run). |
 | `source_questions_bank.json` | Question bank from the source environment. |
 | `target_questions_bank.json` | Question bank from the destination environment. |
-| `target_workflow_config.json` | Workflow configuration you want to update to use the new IDs. |
+| `target_workflow_config.json` | JSON configuration you want to update to use the new IDs.  Originally built for Pipeline and Worflow (workflow_config) so there are a lot of references to "workflow" in the files and code but this is just the raw JSON |
 
 By default the scripts look for files with the exact names above in the repository root. If you download fresh exports, simply overwrite the existing files or place the new ones alongside them with the same names.
 
