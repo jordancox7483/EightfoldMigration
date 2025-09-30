@@ -167,7 +167,7 @@ def replace_custom_field_ids(
     if isinstance(obj, dict):
         new_dict: Dict[str, Any] = {}
         for key, value in obj.items():
-            if key == "custom_field_id":
+            if key in {"custom_field_id", "customFieldId"}:
                 updated, changed = _update_custom_field_id(value, id_map, stats, unmatched_ids)
                 new_dict[key] = updated
             else:
