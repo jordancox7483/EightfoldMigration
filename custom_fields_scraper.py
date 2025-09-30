@@ -19,12 +19,13 @@ import csv
 import getpass
 import sys
 from dataclasses import dataclass
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, Any
 
 from playwright.sync_api import (  # type: ignore[import-not-found]
     TimeoutError as PlaywrightTimeoutError,
     Locator,
     Page,
+    Frame,
     sync_playwright,
 )
 
@@ -46,12 +47,19 @@ def parse_args(argv: Optional[Iterable[str]] = None) -> argparse.Namespace:
             "IDs to a CSV file."
         )
     )
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
         "--subdomain",
-        required=True,
         help=(
             "Subdomain portion of the Eightfold URL (e.g. 'app-wu' for "
             "https://app-wu.eightfold.ai)."
+        ),
+    )
+    group.add_argument(
+        "--url",
+        help=(
+            "Full URL to the custom fields page (e.g. "
+            "'https://app-wu.eightfold.ai/integrations/custom_fields')."
         ),
     )
     parser.add_argument(
@@ -75,6 +83,37 @@ def parse_args(argv: Optional[Iterable[str]] = None) -> argparse.Namespace:
         default=15.0,
         help="Seconds to wait for page elements before giving up (default: 15).",
     )
+    parser.add_argument(
+        "--post-login-wait",
+        type=float,
+        default=10.0,
+        help=(
+            "Extra seconds to wait after login for the page to finish loading "
+            "before scanning for the table (default: 10)."
+        ),
+    )
+    parser.add_argument(
+        "--username",
+        help=(
+            "Eightfold username. If omitted, the script reads from the "
+            "EIGHTFOLD_USERNAME environment variable or prompts interactively."
+        ),
+    )
+    parser.add_argument(
+        "--password",
+        help=(
+            "Eightfold password. If omitted, the script reads from the "
+            "EIGHTFOLD_PASSWORD environment variable or prompts interactively."
+        ),
+    )
+    parser.add_argument(
+        "--manual-continue",
+        action="store_true",
+        help=(
+            "Pause after login and navigating to the target page; press Enter "
+            "manually to continue once the table is visible."
+        ),
+    )
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     if args.headless and args.headed:
@@ -83,11 +122,19 @@ def parse_args(argv: Optional[Iterable[str]] = None) -> argparse.Namespace:
     return args
 
 
-def prompt_for_credentials() -> tuple[str, str]:
-    """Interactively prompt the user for credentials."""
+def prompt_for_credentials(args: argparse.Namespace) -> tuple[str, str]:
+    """Obtain credentials from args, env vars, or interactively."""
 
-    username = input("Eightfold username: ").strip()
-    password = getpass.getpass("Eightfold password: ")
+    import os
+
+    username = (args.username or os.environ.get("EIGHTFOLD_USERNAME") or "").strip()
+    password = args.password or os.environ.get("EIGHTFOLD_PASSWORD")
+
+    if not username:
+        username = input("Eightfold username: ").strip()
+    if not password:
+        password = getpass.getpass("Eightfold password: ")
+
     return username, password
 
 
@@ -148,11 +195,37 @@ def perform_login(page: Page, username: str, password: str, timeout: float) -> N
             pass
 
 
-def extract_headers(page: Page) -> List[str]:
-    """Return the table header labels."""
+def _locate_grid_root(page: Page, timeout_ms: float) -> Optional[Locator]:
+    """Try to locate the table/grid container using multiple selector patterns."""
+    candidates = [
+        "table",
+        "[role='table']",
+        "[role='grid']",
+        "div[aria-label*='table']",
+        "div[aria-label*='grid']",
+    ]
+    for sel in candidates:
+        loc = page.locator(sel)
+        if loc.count() > 0:
+            try:
+                page.wait_for_selector(sel, timeout=timeout_ms)
+            except PlaywrightTimeoutError:
+                pass
+            return loc.first
+    return None
 
-    header_locator = page.locator("table thead tr th")
+
+def extract_headers(page: Page) -> List[str]:
+    """Return the table header labels, supporting semantic tables and ARIA grids."""
+
     headers: List[str] = []
+    root = _locate_grid_root(page, timeout_ms=5000)
+    if root is None:
+        return headers
+
+    header_locator = root.locator("thead tr th")
+    if header_locator.count() == 0:
+        header_locator = root.locator("[role='columnheader']")
     for i in range(header_locator.count()):
         headers.append(header_locator.nth(i).inner_text().strip())
     return headers
@@ -176,10 +249,20 @@ def extract_page_rows(page: Page, name_idx: int, id_idx: int) -> List[FieldRecor
     """Extract all field records from the current table page."""
 
     records: List[FieldRecord] = []
-    row_locator = page.locator("table tbody tr")
+    root = _locate_grid_root(page, timeout_ms=5000)
+    if root is None:
+        return records
+    row_locator = root.locator("tbody tr")
+    if row_locator.count() == 0:
+        # ARIA rows (exclude header rows with columnheader)
+        row_locator = root.locator("[role='row']").filter(
+            has_not=page.locator("[role='columnheader']")
+        )
     for row_num in range(row_locator.count()):
         row = row_locator.nth(row_num)
         cells = row.locator("td")
+        if cells.count() == 0:
+            cells = row.locator("[role='cell'], [role='gridcell']")
         if cells.count() == 0:
             continue
         name = cells.nth(name_idx).inner_text().strip()
@@ -193,7 +276,27 @@ def paginate_and_collect(page: Page, timeout: float) -> List[FieldRecord]:
     """Iterate over the paginated table and collect all field rows."""
 
     # Wait for the table to appear after login.
-    page.wait_for_selector("table", timeout=timeout * 1000)
+    try:
+        root = _locate_grid_root(page, timeout_ms=timeout * 1000)
+        if root is None:
+            raise PlaywrightTimeoutError("Could not locate table/grid root")
+    except PlaywrightTimeoutError as exc:  # pragma: no cover - requires live site
+        # Capture debug artifacts to help identify the correct selectors.
+        try:
+            import os
+            debug_dir = os.path.abspath("debug")
+            os.makedirs(debug_dir, exist_ok=True)
+            png_path = os.path.join(debug_dir, "custom_fields_page.png")
+            html_path = os.path.join(debug_dir, "custom_fields_page.html")
+            page.screenshot(path=png_path, full_page=True)
+            with open(html_path, "w", encoding="utf-8") as f:
+                f.write(page.content())
+            print(f"Debug saved: {png_path}", file=sys.stderr)
+            print(f"Debug saved: {html_path}", file=sys.stderr)
+            print(f"At URL: {page.url}", file=sys.stderr)
+        except Exception:
+            pass
+        raise
     headers = extract_headers(page)
     name_idx = find_column_index(headers, ["Field Name", "Name", "Field"])
     id_idx = find_column_index(headers, ["ID", "Field ID", "Identifier"])
@@ -204,18 +307,25 @@ def paginate_and_collect(page: Page, timeout: float) -> List[FieldRecord]:
         page.wait_for_timeout(300)
         all_records.extend(extract_page_rows(page, name_idx, id_idx))
 
-        next_button = _find_next_button(page)
+        next_button = _find_next_button2(page)
         if next_button is None or not next_button.is_enabled():
             break
 
-        snapshot = page.locator("table tbody").inner_text()
+        body = _locate_grid_root(page, timeout_ms=2000)
+        snapshot = body.inner_text() if body else ""
         next_button.click()
         try:
-            page.wait_for_function(
-                "(prev) => document.querySelector('table tbody').innerText !== prev",
-                arg=snapshot,
-                timeout=timeout * 1000,
-            )
+            # Allow content to refresh; then compare snapshots to detect change.
+            try:
+                page.wait_for_load_state("networkidle", timeout=timeout * 1000)
+            except PlaywrightTimeoutError:
+                pass
+            page.wait_for_timeout(800)
+            new_body = _locate_grid_root(page, timeout_ms=2000)
+            new_snapshot = new_body.inner_text() if new_body else ""
+            if body and snapshot == new_snapshot:
+                # No change detected — assume last page.
+                break
         except PlaywrightTimeoutError:  # pragma: no cover - requires live site
             # If the content did not change, assume we reached the last page.
             break
@@ -242,6 +352,29 @@ def _find_next_button(page: Page) -> Optional[Locator]:
     return None
 
 
+def _find_next_button2(page: Page) -> Optional[Locator]:
+    """Improved next button locator supporting ARIA and unicode arrows."""
+
+    candidates = [
+        "button[aria-label*='Next']",
+        "button[aria-label*='next']",
+        "button:has-text('Next')",
+        "button:has-text('\u203a')",  # '›'
+        "button:has-text('>')",
+        "a[aria-label*='Next']",
+        "a[role='button'][aria-label*='Next']",
+        "a.pagination-right",
+        "a[role='button'].pagination-right",
+        "[role='button']:has-text('Next')",
+    ]
+
+    for selector in candidates:
+        locator = page.locator(selector)
+        if locator.count() > 0:
+            return locator.first
+    return None
+
+
 def write_csv(path: str, records: Iterable[FieldRecord]) -> None:
     """Write the field records to a CSV file."""
 
@@ -254,10 +387,14 @@ def write_csv(path: str, records: Iterable[FieldRecord]) -> None:
 
 def main(argv: Optional[Iterable[str]] = None) -> int:
     args = parse_args(argv)
-    username, password = prompt_for_credentials()
+    username, password = prompt_for_credentials(args)
 
     headless = resolve_headless(args)
-    url = f"https://{args.subdomain}.eightfold.ai/integrations/custom_fields"
+    url = (
+        args.url
+        if getattr(args, "url", None)
+        else f"https://{args.subdomain}.eightfold.ai/integrations/custom_fields"
+    )
 
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(headless=headless)
@@ -266,6 +403,33 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         page.goto(url)
 
         perform_login(page, username, password, timeout=args.timeout)
+
+        # Allow dynamic content and redirects to settle.
+        try:
+            page.wait_for_load_state("networkidle", timeout=args.timeout * 1000)
+        except PlaywrightTimeoutError:
+            pass
+        page.wait_for_timeout(int(args.post_login_wait * 1000))
+
+        # Some flows land on a dashboard after login; ensure we are at the target page.
+        if page.url != url:
+            page.goto(url)
+            try:
+                page.wait_for_load_state("networkidle", timeout=args.timeout * 1000)
+            except PlaywrightTimeoutError:
+                pass
+            page.wait_for_timeout(500)
+
+        if args.manual_continue:
+            print(
+                "Logged in. Manually ensure the Custom Fields page is fully loaded, then press Enter to continue...",
+                file=sys.stderr,
+            )
+            try:
+                input()
+            except EOFError:
+                # Non-interactive environment: continue without pause.
+                pass
 
         records = paginate_and_collect(page, timeout=args.timeout)
 
