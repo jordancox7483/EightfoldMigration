@@ -180,8 +180,36 @@ The repository now includes `custom_fields_scraper.py`, a helper that exports th
 
 > Tip: For troubleshooting (for example, to confirm the correct login selectors for your tenant), append `--headed` to watch the automated session. Use `--headless` if you want to force headless mode explicitly.
 
+---
 
-## 7. Quick reference
+## 8. Updating profile display custom field IDs
+
+`custom_field_id_updater.py` rewrites the `custom_field_id` values embedded in a profile display configuration. It compares the legacy IDs from a "source" CSV to the replacement IDs in a "target" CSV, then walks the target profile JSON and swaps anything it recognises.
+
+### Basic usage
+
+If your files live in the project root and use the default names (`source_profile_display.json`, `target_profile_display.json`, `source.csv`, `target.csv`), run:
+
+```bash
+python custom_field_id_updater.py
+```
+
+When your exports live elsewhere (for example, in `C:\Users\Jordan\Downloads`), pass explicit paths:
+
+```powershell
+python custom_field_id_updater.py \
+  --source-profile "C:\Users\Jordan\Downloads\source_profile_display.json" \
+  --target-profile "C:\Users\Jordan\Downloads\target_profile_display.json" \
+  --source-csv "C:\Users\Jordan\Downloads\source.csv" \
+  --target-csv "C:\Users\Jordan\Downloads\target.csv"
+```
+
+The script prints a summary of how many IDs were updated, highlights any custom fields that were present in the source export but missing from the target export (and vice-versa), and calls out legacy IDs it could not map. Use these diagnostics to confirm whether you need to re-export the CSVs or manually handle the remaining fields.
+
+Add `--dry-run` to preview the summary without editing the JSON. To write the output to a separate file instead of overwriting the target profile, provide `--output path\to\profile.json`.
+
+
+## 9. Quick reference
 
 | Task | Command |
 | --- | --- |
@@ -192,5 +220,6 @@ The repository now includes `custom_fields_scraper.py`, a helper that exports th
 | Run sync script (dry run) | `python sync_workflow_ids.py --dry-run` |
 | Run report script | `python report_workflow_id_mappings.py` |
 | Export report to file | `python report_workflow_id_mappings.py > workflow_id_mappings.csv` |
+| Update profile display IDs | `python custom_field_id_updater.py --dry-run` |
 
 Keep this README open in VS Code (pin the tab) so the step-by-step instructions are always within reach when you revisit the project.
