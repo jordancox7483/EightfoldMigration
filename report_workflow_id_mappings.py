@@ -3,7 +3,7 @@
 
 This script inspects the source and target form/question exports and emits
 CSV-friendly tables describing how IDs should be translated. Unlike
-``sync_workflow_ids.py`` it never rewrites the workflow configuration; instead it
+``form_and_question_id_updater.py`` it never rewrites the workflow configuration; instead it
 prints the mappings so they can be applied manually (e.g. through VLOOKUP or a
 text editor).
 """
@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping, Sequence, Tuple
 
-from sync_workflow_ids import (
+from form_and_question_id_updater import (
     DEFAULT_SOURCE_FORMS,
     DEFAULT_SOURCE_QUESTIONS,
     DEFAULT_TARGET_FORMS,

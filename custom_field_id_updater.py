@@ -3,8 +3,8 @@
 
 This helper reads mappings from source/target CSV exports, then walks a
 profile display JSON file to swap any legacy ``custom_field_id`` values with
-their replacements. The intent mirrors ``sync_workflow_ids.py`` but with a
-single field type and simplified mapping rules.
+their replacements. The intent mirrors ``form_and_question_id_updater.py`` but
+with a single field type and simplified mapping rules.
 """
 
 from __future__ import annotations
@@ -276,4 +276,3 @@ def main(argv: Iterable[str] | None = None) -> int:
 
 if __name__ == "__main__":  # pragma: no cover - CLI entry point
     raise SystemExit(main())
-

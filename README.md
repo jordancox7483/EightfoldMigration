@@ -2,7 +2,7 @@
 
 This repository contains two small Python scripts that help reconcile form and question IDs between environments when migrating configuration data. Both scripts work with the JSON exports produced by your platform.
 
-- `sync_workflow_ids.py` — Updates a workflow configuration file in place so it uses the form and question IDs from the target environment.
+- `form_and_question_id_updater.py` — Updates form/question IDs across workflow-style JSON, including IDs embedded inside strings such as templated headers.
 - `report_workflow_id_mappings.py` — Produces CSV-style tables summarising every form and question mapping, which you can use for manual VLOOKUPs or spot checks.
 
 The sections below walk through installing prerequisites, opening the project in Visual Studio Code, and running each script with new exports.
@@ -71,7 +71,7 @@ If you prefer to keep dated filenames, both scripts provide flags to point to al
 
 ---
 
-## 4. Running `sync_workflow_ids.py`
+## 4. Running `form_and_question_id_updater.py`
 
 This script rewrites `target_workflow_config.json` in place, replacing any form or question IDs that appear in the source export with the corresponding IDs from the target export.
 
@@ -80,15 +80,15 @@ This script rewrites `target_workflow_config.json` in place, replacing any form 
 1. Ensure the virtual environment is active in your VS Code terminal.
 2. Run the script:
    ```bash
-   python sync_workflow_ids.py
+   python form_and_question_id_updater.py
    ```
-3. The script prints a summary of each replacement (form IDs, question IDs, and totals) and updates `target_workflow_config.json` on disk.
+3. The script prints a summary of each replacement (form IDs, question IDs, and totals) and updates `target_workflow_config.json` on disk. It now also scans strings (for example `"{{ form_submission.get_response_field('123') }}"`) and replaces any embedded numeric IDs it recognises.
 
 ### Dry-run mode
 
 If you want to preview what would change without editing the workflow file, add `--dry-run`:
 ```bash
-python sync_workflow_ids.py --dry-run
+python form_and_question_id_updater.py --dry-run
 ```
 Dry-run mode prints the same tables and totals but leaves the JSON untouched.
 
@@ -96,7 +96,7 @@ Dry-run mode prints the same tables and totals but leaves the JSON untouched.
 
 If your exports have different filenames or live elsewhere, pass explicit paths:
 ```bash
-python sync_workflow_ids.py \
+python form_and_question_id_updater.py \
     --source-forms data/qa_forms.json \
     --target-forms data/prod_forms.json \
     --source-questions data/qa_questions.json \
@@ -109,6 +109,7 @@ python sync_workflow_ids.py \
 - **Missing files:** The script validates that each file exists and stops with a readable error if one is missing. Double-check the paths you passed.
 - **Mismatched forms or questions:** If a form label or question label exists in the source data but not in the target, the script highlights the mismatch so you can investigate before deploying.
 - **Git safety:** Because the workflow file is version-controlled, you can always review the changes in VS Code’s Source Control panel before committing.
+- **Windows encoding:** Some Eightfold exports include characters outside Windows’ default code page. If you hit a `UnicodeDecodeError`, rerun with `python -X utf8 form_and_question_id_updater.py ...` to force UTF-8 decoding.
 
 ---
 
@@ -216,8 +217,8 @@ Add `--dry-run` to preview the summary without editing the JSON. To write the ou
 | Activate virtual environment (macOS/Linux) | `source .venv/bin/activate` |
 | Activate virtual environment (Windows PowerShell) | `.venv\Scripts\Activate.ps1` |
 | Install dependencies | `pip install -r test/requirements.txt` |
-| Run sync script | `python sync_workflow_ids.py` |
-| Run sync script (dry run) | `python sync_workflow_ids.py --dry-run` |
+| Run form/question updater | `python form_and_question_id_updater.py` |
+| Run form/question updater (dry run) | `python form_and_question_id_updater.py --dry-run` |
 | Run report script | `python report_workflow_id_mappings.py` |
 | Export report to file | `python report_workflow_id_mappings.py > workflow_id_mappings.csv` |
 | Update profile display IDs | `python custom_field_id_updater.py --dry-run` |

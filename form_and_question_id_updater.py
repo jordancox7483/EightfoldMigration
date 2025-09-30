@@ -137,12 +137,26 @@ def replace_ids(
             stats[(obj, new_value)] += 1
         return new_value
 
-    if isinstance(obj, str) and obj.isdigit():
-        numeric = int(obj)
-        new_value = update_numeric(numeric)
-        if new_value != numeric:
-            stats[(numeric, new_value)] += 1
-            return str(new_value)
+    if isinstance(obj, str):
+        if obj.isdigit():
+            numeric = int(obj)
+            new_value = update_numeric(numeric)
+            if new_value != numeric:
+                stats[(numeric, new_value)] += 1
+                return str(new_value)
+            return obj
+
+        def repl(match: re.Match[str]) -> str:
+            numeric = int(match.group(1))
+            new_value = update_numeric(numeric)
+            if new_value != numeric:
+                stats[(numeric, new_value)] += 1
+                return str(new_value)
+            return match.group(0)
+
+        updated, count = re.subn(r"(?<!\d)(\d+)(?!\d)", repl, obj)
+        if count > 0:
+            return updated
         return obj
 
     return obj
