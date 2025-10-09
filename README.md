@@ -3,6 +3,7 @@
 This repository contains some small Python scripts that help reconcile form and question IDs between environments when migrating configuration data. Both scripts work with the raw JSON from config.
 
 - `form_and_question_id_updater.py` — Updates form/question IDs across JSON, including IDs embedded inside strings such as templated headers.
+- `dependency_question_id_updater.py` — Repairs question dependency references inside the form and question libraries after IDs are migrated.
 - `report_workflow_id_mappings.py` — Produces CSV tables summarising every form and question mapping, which you can use for manual VLOOKUPs or spot checks.
 - `custom_fields_scraper.py`, Exports the field names and IDs from the Eightfold Custom Fields integration page. The script automates pagination and writes the results to a CSV file.  Needs login info (pass as variables DO NOT store in file) and confirm EF URL - for both source and target (run twice, inform script of the desired output name, the next script below uses those outputs so probably stick with "source.csv" and "target.csv")
 - `custom_field_id_updater.py` Rewrites the `custom_field_id` values embedded in a JSON configuration. It compares the legacy IDs from a "source" CSV to the replacement IDs in a "target" CSV, then walks the target profile JSON and swaps anything it recognises.
@@ -117,7 +118,49 @@ python form_and_question_id_updater.py \
 
 ---
 
-## 5. Running `report_workflow_id_mappings.py`
+## 5. Updating question dependencies inside form/question libraries
+
+`dependency_question_id_updater.py` scans the target form library and question bank for legacy question IDs that still reference the source environment (for example in `question_dependencies`, `child_question_ids`, or templated strings). It builds a mapping between legacy and replacement question IDs by comparing the source and target exports, then rewrites every occurrence so that dependencies point at the new IDs.
+
+### When to use it
+
+Run this script after you have already synced the core form/question IDs and notice that dependency blocks still contain old question IDs. It is especially helpful for:
+
+- `question_dependencies` entries that refer to a parent question by ID.
+- Any nested `child_question_ids` collections.
+- Free-form strings that interpolate IDs such as `{{ formResponse<1970359196716205> }}`.
+
+### Basic usage (default filenames)
+
+```bash
+python dependency_question_id_updater.py
+```
+
+By default the script reads the four JSON exports in the repository root (`source_forms_library.json`, `target_forms_library.json`, `source_questions_bank.json`, `target_questions_bank.json`) and writes updated copies alongside them as `Updated_target_forms_library.json` and `Updated_target_questions_bank.json`.
+
+It prints a summary of how many IDs were remapped and the most frequent replacements so you can sanity-check the results.
+
+### Custom file paths
+
+You can override both the inputs and the output locations:
+
+```powershell
+python dependency_question_id_updater.py \
+  --source-forms "C:\Exports\source_forms_library.json" \
+  --target-forms "C:\Exports\target_forms_library.json" \
+  --source-questions "C:\Exports\source_questions_bank.json" \
+  --target-questions "C:\Exports\target_questions_bank.json" \
+  --updated-forms "C:\Users\Jordan\Downloads\Updated_target_forms_library.json" \
+  --updated-questions "C:\Users\Jordan\Downloads\Updated_target_questions_bank.json"
+```
+
+Add `--dry-run` if you want to preview the replacement counts without writing the output files.
+
+> Tip: keep the generated files under version control (or compare with the originals) before rolling them into downstream systems, so you can spot-check any large batches of changes.
+
+---
+
+## 6. Running `report_workflow_id_mappings.py`
 
 Use this script when you want a CSV-style report for manual reconciliation (for example, to copy into Excel and run a VLOOKUP).
 
@@ -152,7 +195,7 @@ python report_workflow_id_mappings.py \
 
 ---
 
-## 6. Keeping everything up to date
+## 7. Keeping everything up to date
 
 - Whenever you receive new exports, replace the JSON files (or pass new paths) and rerun whichever script you need.
 - Use Git to track and review changes:
@@ -169,7 +212,7 @@ python report_workflow_id_mappings.py \
 
 ---
 
-## 7. Scraping Eightfold custom fields
+## 8. Scraping Eightfold custom fields
 
 The repository now includes `custom_fields_scraper.py`, a helper that exports the field names and IDs from the Eightfold Custom Fields integration page. The script automates pagination and writes the results to a CSV file.
 
@@ -187,7 +230,7 @@ The repository now includes `custom_fields_scraper.py`, a helper that exports th
 
 ---
 
-## 8. Updating profile display custom field IDs
+## 9. Updating profile display custom field IDs
 
 `custom_field_id_updater.py` rewrites the `custom_field_id` values embedded in a profile display configuration. It compares the legacy IDs from a "source" CSV to the replacement IDs in a "target" CSV, then walks the target profile JSON and swaps anything it recognises.
 
@@ -214,7 +257,7 @@ The script prints a summary of how many IDs were updated, highlights any custom 
 Add `--dry-run` to preview the summary without editing the JSON. To write the output to a separate file instead of overwriting the target profile, provide `--output path\to\profile.json`.
 
 
-## 9. Quick reference
+## 10. Quick reference
 
 | Task | Command |
 | --- | --- |
@@ -223,6 +266,8 @@ Add `--dry-run` to preview the summary without editing the JSON. To write the ou
 | Install dependencies | `pip install -r test/requirements.txt` |
 | Run form/question updater | `python form_and_question_id_updater.py` |
 | Run form/question updater (dry run) | `python form_and_question_id_updater.py --dry-run` |
+| Update dependency question IDs | `python dependency_question_id_updater.py` |
+| Update dependency question IDs (dry run) | `python dependency_question_id_updater.py --dry-run` |
 | Run report script | `python report_workflow_id_mappings.py` |
 | Export report to file | `python report_workflow_id_mappings.py > workflow_id_mappings.csv` |
 | Update profile display IDs | `python custom_field_id_updater.py --dry-run` |
