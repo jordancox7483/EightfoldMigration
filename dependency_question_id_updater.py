@@ -25,6 +25,7 @@ DEFAULT_UPDATED_FORMS = Path("Updated_target_forms_library.json")
 DEFAULT_UPDATED_QUESTIONS = Path("Updated_target_questions_bank.json")
 
 NUMERIC_PATTERN = re.compile(r"(?<!\\d)(\\d+)(?!\\d)")
+EMBEDDED_TEMPLATE_PATTERN = re.compile(r"(\{\{[^{}<]*<)(\d+)(>[^{}]*\}\})")
 
 
 class DependencyUpdateError(RuntimeError):
@@ -39,7 +40,7 @@ def load_json(path: Path) -> Any:
 
 
 def write_json(path: Path, data: Any) -> None:
-    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8")
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def to_int(value: Any) -> int:
@@ -230,6 +231,27 @@ def replace_numeric_int(
     return value
 
 
+def replace_embedded_template_ids(
+    value: str,
+    mapping: Mapping[int, int],
+    stats: Counter,
+    known_ids: Set[int],
+    missing_ids: Set[int],
+) -> str:
+    def repl(match: re.Match[str]) -> str:
+        prefix, old_id_text, suffix = match.groups()
+        old_id = int(old_id_text)
+        new_id = mapping.get(old_id)
+        if new_id is not None:
+            stats[(old_id, new_id)] += 1
+            return f"{prefix}{new_id}{suffix}"
+        if old_id in known_ids:
+            missing_ids.add(old_id)
+        return match.group(0)
+
+    return EMBEDDED_TEMPLATE_PATTERN.sub(repl, value)
+
+
 def replace_string_value(
     value: str,
     mapping: Mapping[int, int],
@@ -246,6 +268,10 @@ def replace_string_value(
         if old_id in known_ids:
             missing_ids.add(old_id)
         return value
+
+    updated_value = replace_embedded_template_ids(value, mapping, stats, known_ids, missing_ids)
+    if updated_value != value:
+        value = updated_value
 
     def repl(match: re.Match[str]) -> str:
         old_id = int(match.group(1))
