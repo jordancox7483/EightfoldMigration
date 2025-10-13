@@ -11,9 +11,9 @@ from __future__ import annotations
 import argparse
 import json
 import re
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Any, Dict, Mapping, Sequence
+from typing import Any, Dict, List, Mapping, Sequence, Set
 
 DEFAULT_SOURCE_FORMS = Path("source_forms_library.json")
 DEFAULT_TARGET_FORMS = Path("target_forms_library.json")
@@ -28,7 +28,7 @@ class SyncError(RuntimeError):
 
 def load_json(path: Path) -> Any:
     try:
-        return json.loads(path.read_text())
+        return json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError as exc:
         raise SyncError(f"Missing required file: {path}") from exc
 
@@ -54,6 +54,15 @@ def build_form_map(
             continue
         form_map[to_int(src_form["id"])] = to_int(target_form["id"])
     return form_map
+
+
+def canonicalize(obj: Any) -> str:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+def sanitize_question(question: Mapping[str, Any]) -> str:
+    payload = {key: question[key] for key in question if key != "id"}
+    return canonicalize(payload)
 
 
 def build_question_map(
@@ -111,6 +120,45 @@ def build_question_map(
             question_map[src_qid] = tgt_qid
 
     return question_map
+
+
+def extend_question_map_with_signatures(
+    question_map: Dict[int, int],
+    source_questions: Mapping[int, Mapping[str, Any]],
+    target_questions: Mapping[int, Mapping[str, Any]],
+) -> list[int]:
+    used_target_ids: Set[int] = set(question_map.values())
+    source_signature_map: Dict[str, List[int]] = defaultdict(list)
+    target_signature_map: Dict[str, List[int]] = defaultdict(list)
+
+    for src_id, question in source_questions.items():
+        if src_id not in question_map:
+            source_signature_map[sanitize_question(question)].append(src_id)
+
+    for tgt_id, question in target_questions.items():
+        if tgt_id not in used_target_ids:
+            target_signature_map[sanitize_question(question)].append(tgt_id)
+
+    unresolved: list[int] = []
+    for signature, src_ids in source_signature_map.items():
+        target_ids = target_signature_map.get(signature, [])
+        available_targets = [tid for tid in target_ids if tid not in used_target_ids]
+        if not available_targets:
+            unresolved.extend(src_ids)
+            continue
+
+        if len(src_ids) == len(available_targets):
+            for src_id, tgt_id in zip(sorted(src_ids), sorted(available_targets)):
+                question_map[src_id] = tgt_id
+                used_target_ids.add(tgt_id)
+        elif len(src_ids) == 1:
+            tgt_id = available_targets[0]
+            question_map[src_ids[0]] = tgt_id
+            used_target_ids.add(tgt_id)
+        else:
+            unresolved.extend(src_ids)
+
+    return unresolved
 
 
 def replace_ids(
@@ -180,12 +228,20 @@ def sync_ids(
     source_questions = {to_int(q["id"]): q for q in source_questions_list}
     target_questions = {to_int(q["id"]): q for q in target_questions_list}
     question_map = build_question_map(source_forms, target_forms, source_questions, target_questions)
+    unresolved = extend_question_map_with_signatures(question_map, source_questions, target_questions)
+    if unresolved:
+        preview = ", ".join(str(item) for item in sorted(unresolved)[:10])
+        suffix = " ..." if len(unresolved) > 10 else ""
+        raise SyncError(
+            "Unable to find target questions matching the following source IDs by content: "
+            f"{preview}{suffix}"
+        )
 
     stats: Counter = Counter()
     updated_workflow = replace_ids(workflow, form_map, question_map, stats)
 
     if write and stats:
-        original_text = target_workflow_path.read_text()
+        original_text = target_workflow_path.read_text(encoding="utf-8")
         updated_text = original_text
         for (old, new), count in sorted(stats.items()):
             pattern = re.compile(rf"(?<!\\d){old}(?!\\d)")
@@ -199,9 +255,9 @@ def sync_ids(
         if json.loads(updated_text) != updated_workflow:
             raise SyncError("Text replacements did not produce the expected workflow configuration")
 
-        target_workflow_path.write_text(updated_text)
+        target_workflow_path.write_text(updated_text, encoding="utf-8")
     elif write:
-        target_workflow_path.write_text(json.dumps(updated_workflow, indent=2))
+        target_workflow_path.write_text(json.dumps(updated_workflow, indent=2), encoding="utf-8")
 
     return stats
 

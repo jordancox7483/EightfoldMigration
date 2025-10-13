@@ -19,6 +19,7 @@ import csv
 import getpass
 import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Iterable, List, Optional, Any
 
 from playwright.sync_api import (  # type: ignore[import-not-found]
@@ -378,7 +379,10 @@ def _find_next_button2(page: Page) -> Optional[Locator]:
 def write_csv(path: str, records: Iterable[FieldRecord]) -> None:
     """Write the field records to a CSV file."""
 
-    with open(path, "w", newline="", encoding="utf-8") as handle:
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+
+    with destination.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle)
         writer.writerow(["Field Name", "Field ID"])
         for record in records:
