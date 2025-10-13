@@ -79,7 +79,7 @@ class MigrationApp(tk.Tk):
         self.scraper_username_var = tk.StringVar()
         self.scraper_password_var = tk.StringVar()
         self.scraper_output_dir_var = tk.StringVar()
-        self.scraper_output_name_var = tk.StringVar(value="custom_fields.csv")
+        self.scraper_output_name_var = tk.StringVar(value="source.csv")
 
         self.custom_source_csv_var = tk.StringVar()
         self.custom_target_csv_var = tk.StringVar()
@@ -151,8 +151,20 @@ class MigrationApp(tk.Tk):
             "Output filename",
             self.scraper_output_name_var,
             width=35,
-            tooltip="Name of the CSV created by the scraper.",
+            tooltip="Name of the CSV created by the scraper (e.g. source.csv, target.csv).",
         )
+        row += 1
+
+        ttk.Label(
+            scroll_frame,
+            text=(
+                "Tip: run the scraper twice. Export the source environment first and save it as "
+                "'source.csv', then export the target environment and save it as 'target.csv'. "
+                "Those files feed into custom_field_id_updater.py."
+            ),
+            wraplength=680,
+            foreground="#555555",
+        ).grid(row=row, column=0, sticky="w", pady=(2, 8))
         row += 1
 
         scraper_btn = ttk.Button(scroll_frame, text="Run custom_fields_scraper.py", command=self._trigger_scraper)
