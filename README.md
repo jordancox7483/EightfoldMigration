@@ -1,3 +1,7 @@
+# Eightfold Migration Utilities
+
+> **Looking for the migration scripts?** The new Tkinter front-end bundles the existing CLI tools and can be packaged into a standalone executable. See [GUI_USAGE.md](GUI_USAGE.md) for setup, usage, and build steps.
+
 # Workflow ID Sync Utilities
 
 This repository contains some small Python scripts that help reconcile form and question IDs between environments when migrating configuration data. Both scripts work with the raw JSON from config.

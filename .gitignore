@@ -11,3 +11,10 @@ venv/
 # Local debug artifacts
 debug/
 
+# Build artifacts
+dist/
+build/
+playwright-browsers/
+*.spec
+*.exe
+
