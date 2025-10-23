@@ -69,13 +69,34 @@ def sanitize_question(question: Mapping[str, Any]) -> str:
     return canonicalize(payload)
 
 
+def validate_form_entries(forms: Sequence[Mapping[str, Any]], *, context: str) -> None:
+    for index, form in enumerate(forms):
+        if not isinstance(form, Mapping):
+            raise DependencyUpdateError(
+                f"{context} entry at index {index} is not an object. "
+                "Confirm the file is a form library export."
+            )
+        name = form.get("display_name")
+        if not isinstance(name, str) or not name:
+            raise DependencyUpdateError(
+                f"{context} entry at index {index} is missing a 'display_name'. "
+                "Ensure you selected the form library JSON rather than the questions bank."
+            )
+
+
+def index_forms_by_name(forms: Sequence[Mapping[str, Any]], *, context: str) -> Dict[str, Mapping[str, Any]]:
+    validate_form_entries(forms, context=context)
+    return {form["display_name"]: form for form in forms}
+
+
 def build_question_map(
     source_forms: Sequence[Mapping[str, Any]],
     target_forms: Sequence[Mapping[str, Any]],
     source_questions: Mapping[int, Mapping[str, Any]],
     target_questions: Mapping[int, Mapping[str, Any]],
 ) -> Dict[int, int]:
-    target_forms_by_name = {form["display_name"]: form for form in target_forms}
+    validate_form_entries(source_forms, context="Source forms library")
+    target_forms_by_name = index_forms_by_name(target_forms, context="Target forms library")
     question_map: Dict[int, int] = {}
 
     for src_form in source_forms:
