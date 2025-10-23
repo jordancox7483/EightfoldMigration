@@ -4,7 +4,7 @@
 
 # Workflow ID Sync Utilities
 
-This repository contains some small Python scripts that help reconcile form and question IDs between environments when migrating configuration data. Both scripts work with the raw JSON from config.
+This repository contains some small Python scripts that help reconcile form and question IDs between environments when migrating configuration data. All scripts work with the raw JSON from config.
 
 - `form_and_question_id_updater.py` — Updates form/question IDs across JSON, including IDs embedded inside strings such as templated headers.
 - `dependency_question_id_updater.py` — Repairs question dependency references inside the form and question libraries after IDs are migrated.
