@@ -26,6 +26,7 @@ DEFAULT_UPDATED_QUESTIONS = Path("Updated_target_questions_bank.json")
 
 NUMERIC_PATTERN = re.compile(r"(?<!\\d)(\\d+)(?!\\d)")
 EMBEDDED_TEMPLATE_PATTERN = re.compile(r"(\{\{[^{}<]*<)(\d+)(>[^{}]*\}\})")
+TARGET_BLANK_ATTR_PATTERN = re.compile(r"\s+target=\"_blank\"")
 
 
 class DependencyUpdateError(RuntimeError):
@@ -55,8 +56,16 @@ def canonicalize(obj: Any) -> str:
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 
+def normalize_label(label: Any) -> Any:
+    if isinstance(label, str):
+        return TARGET_BLANK_ATTR_PATTERN.sub("", label)
+    return label
+
+
 def sanitize_question(question: Mapping[str, Any]) -> str:
     payload = {key: question[key] for key in question if key != "id"}
+    if "label" in payload:
+        payload["label"] = normalize_label(payload["label"])
     return canonicalize(payload)
 
 
@@ -90,7 +99,7 @@ def build_question_map(
             if tgt_question:
                 tgt_full_signatures[tgt_id] = sanitize_question(tgt_question)
                 tgt_loose_signatures[tgt_id] = (
-                    tgt_question.get("label"),
+                    normalize_label(tgt_question.get("label")),
                     tgt_question.get("question_type"),
                 )
 
@@ -106,7 +115,7 @@ def build_question_map(
             src_question = source_questions.get(src_id)
             signature = sanitize_question(src_question) if src_question else None
             loose_signature = (
-                (src_question.get("label"), src_question.get("question_type"))
+                (normalize_label(src_question.get("label")), src_question.get("question_type"))
                 if src_question
                 else None
             )

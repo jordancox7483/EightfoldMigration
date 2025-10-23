@@ -20,6 +20,7 @@ DEFAULT_TARGET_FORMS = Path("target_forms_library.json")
 DEFAULT_SOURCE_QUESTIONS = Path("source_questions_bank.json")
 DEFAULT_TARGET_QUESTIONS = Path("target_questions_bank.json")
 DEFAULT_TARGET_WORKFLOW = Path("target_workflow_config.json")
+TARGET_BLANK_ATTR_PATTERN = re.compile(r"\s+target=\"_blank\"")
 
 
 class SyncError(RuntimeError):
@@ -60,8 +61,16 @@ def canonicalize(obj: Any) -> str:
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 
+def normalize_label(label: Any) -> Any:
+    if isinstance(label, str):
+        return TARGET_BLANK_ATTR_PATTERN.sub("", label)
+    return label
+
+
 def sanitize_question(question: Mapping[str, Any]) -> str:
     payload = {key: question[key] for key in question if key != "id"}
+    if "label" in payload:
+        payload["label"] = normalize_label(payload["label"])
     return canonicalize(payload)
 
 
@@ -99,8 +108,10 @@ def build_question_map(
             tgt_question = target_questions.get(tgt_qid)
 
             if src_question and tgt_question:
+                src_label = normalize_label(src_question.get("label"))
+                tgt_label = normalize_label(tgt_question.get("label"))
                 if (
-                    src_question.get("label") != tgt_question.get("label")
+                    src_label != tgt_label
                     or src_question.get("question_type") != tgt_question.get("question_type")
                 ):
                     raise SyncError(
