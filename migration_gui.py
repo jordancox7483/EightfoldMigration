@@ -50,6 +50,7 @@ class FileSelection:
     label: str
     variable: tk.StringVar
     filetypes: tuple[tuple[str, str], ...] = (("JSON files", "*.json"), ("All files", "*.*"))
+    tooltip: str | None = None
 
 
 class MigrationApp(tk.Tk):
@@ -86,6 +87,8 @@ class MigrationApp(tk.Tk):
 
         self.updated_libraries_dir_var = tk.StringVar()
         self.updated_json_dir_var = tk.StringVar()
+        self.apply_form_updates_var = tk.BooleanVar(value=True)
+        self.apply_custom_updates_var = tk.BooleanVar(value=True)
 
         self.status_var = tk.StringVar()
 
@@ -108,25 +111,53 @@ class MigrationApp(tk.Tk):
         scroll_frame.bind("<Configure>", on_configure)
 
         # Section 1: Required JSON files.
-        ttk.Label(scroll_frame, text="Core JSON Inputs", font=("Segoe UI", 11, "bold")).grid(
+        ttk.Label(scroll_frame, text="JSON Inputs", font=("Segoe UI", 11, "bold")).grid(
             row=0, column=0, sticky="w", pady=(0, 4)
         )
         file_entries = [
-            FileSelection("Source questions bank", self.source_questions_var),
-            FileSelection("Source forms library", self.source_forms_var),
-            FileSelection("Target questions bank", self.target_questions_var),
-            FileSelection("Target forms library", self.target_forms_var),
-            FileSelection("Target configuration JSON", self.target_json_var),
+            FileSelection(
+                "Source questions bank",
+                self.source_questions_var,
+                tooltip="JSON array of question objects exported from the source environment.",
+            ),
+            FileSelection(
+                "Source forms library",
+                self.source_forms_var,
+                tooltip="Form definitions from the source environment; used to recognise legacy IDs.",
+            ),
+            FileSelection(
+                "Target questions bank",
+                self.target_questions_var,
+                tooltip="Questions export from the destination environment that already contains the new IDs.",
+            ),
+            FileSelection(
+                "Target forms library",
+                self.target_forms_var,
+                tooltip="Published forms from the destination environment. Each entry must include a display_name.",
+            ),
+            FileSelection(
+                "Target configuration JSON",
+                self.target_json_var,
+                tooltip="The workflow/configuration JSON you want to rewrite with the new IDs.",
+            ),
         ]
         for idx, selection in enumerate(file_entries, start=1):
             self._add_file_picker(scroll_frame, idx, selection)
 
-        row_offset = len(file_entries) + 2
+        tip_row = len(file_entries) + 1
+        ttk.Label(
+            scroll_frame,
+            text="Tip: Use matching exports captured from the source and target environments at the same time so ID comparisons stay in sync.",
+            wraplength=680,
+            foreground="#555555",
+        ).grid(row=tip_row, column=0, sticky="w", pady=(2, 8))
+
+        row_offset = tip_row + 2
 
         ttk.Separator(scroll_frame).grid(row=row_offset - 1, column=0, columnspan=3, sticky="ew", pady=10)
 
         # Section 2: Custom fields scraper.
-        ttk.Label(scroll_frame, text="Custom Fields Scraper", font=("Segoe UI", 11, "bold")).grid(
+        ttk.Label(scroll_frame, text="Custom Fields Scraper Utility", font=("Segoe UI", 11, "bold")).grid(
             row=row_offset, column=0, sticky="w", pady=(0, 4)
         )
         row = row_offset + 1
@@ -158,7 +189,7 @@ class MigrationApp(tk.Tk):
         ttk.Label(
             scroll_frame,
             text=(
-                "Tip: run the scraper twice. Export the source environment first and save it as "
+                "Tip: This utility scrapes all custom fields from Eightfold when provided login details.  Run the scraper twice. Export the source environment first and save it as "
                 "'source.csv', then export the target environment and save it as 'target.csv'. "
                 "Those files feed into custom_field_id_updater.py."
             ),
@@ -169,6 +200,10 @@ class MigrationApp(tk.Tk):
 
         scraper_btn = ttk.Button(scroll_frame, text="Run custom_fields_scraper.py", command=self._trigger_scraper)
         scraper_btn.grid(row=row, column=0, sticky="w", pady=(6, 2))
+        _Tooltip(
+            scraper_btn,
+            "Launches custom_fields_scraper.py so you can capture the custom field IDs from an Eightfold tenant.",
+        )
         row += 1
 
         ttk.Label(
@@ -183,6 +218,7 @@ class MigrationApp(tk.Tk):
                 "Source custom fields CSV",
                 self.custom_source_csv_var,
                 (("CSV files", "*.csv"), ("All files", "*.*")),
+                tooltip="CSV generated from the source tenant via custom_fields_scraper.py (e.g. source.csv).",
             ),
         )
         row += 1
@@ -193,6 +229,7 @@ class MigrationApp(tk.Tk):
                 "Target custom fields CSV",
                 self.custom_target_csv_var,
                 (("CSV files", "*.csv"), ("All files", "*.*")),
+                tooltip="CSV from the target tenant containing the replacement custom_field_id values (e.g. target.csv).",
             ),
         )
         row += 1
@@ -201,7 +238,7 @@ class MigrationApp(tk.Tk):
         row += 1
 
         # Section 3: Outputs.
-        ttk.Label(scroll_frame, text="ID Migration Outputs", font=("Segoe UI", 11, "bold")).grid(
+        ttk.Label(scroll_frame, text="Forms and Question ID Updater", font=("Segoe UI", 11, "bold")).grid(
             row=row, column=0, sticky="w", pady=(0, 4)
         )
         row += 1
@@ -220,9 +257,21 @@ class MigrationApp(tk.Tk):
             command=self._trigger_libraries_update,
         )
         libraries_btn.grid(row=row, column=0, sticky="w", pady=(6, 2))
+        _Tooltip(
+            libraries_btn,
+            "Runs dependency_question_id_updater.py to create Updated_target_*.json copies with fixed dependencies.",
+        )
         row += 1
 
-        ttk.Label(scroll_frame, text="Custom JSON updates", font=("Segoe UI", 10, "bold")).grid(
+        ttk.Label(
+            scroll_frame,
+            text="Tip: This updates forms and questions JSON to new values, including dependent, child, and embeded ID values.  The generated files live alongside the originals so you can diff them before importing.",
+            wraplength=680,
+            foreground="#555555",
+        ).grid(row=row, column=0, sticky="w", pady=(0, 10))
+        row += 1
+
+        ttk.Label(scroll_frame, text="Update JSON Config (Custom fields and/or Form/Question ID's)", font=("Segoe UI", 10, "bold")).grid(
             row=row, column=0, sticky="w", pady=(12, 3)
         )
         row += 1
@@ -235,12 +284,48 @@ class MigrationApp(tk.Tk):
         )
         row += 1
 
+        ttk.Label(
+            scroll_frame,
+            text="Choose which passes to apply when rewriting the selected JSON so you can split the work across multiple runs.",
+            wraplength=680,
+            foreground="#555555",
+        ).grid(row=row, column=0, sticky="w", pady=(0, 6))
+        row += 1
+
+        form_check = ttk.Checkbutton(
+            scroll_frame,
+            text="Apply form/question ID remap (form_and_question_id_updater.py)",
+            variable=self.apply_form_updates_var,
+        )
+        form_check.grid(row=row, column=0, sticky="w", pady=1)
+        _Tooltip(
+            form_check,
+            "When enabled, copies the target JSON and rewrites every form/question reference using the new IDs.",
+        )
+        row += 1
+
+        custom_check = ttk.Checkbutton(
+            scroll_frame,
+            text="Apply custom field ID remap (custom_field_id_updater.py)",
+            variable=self.apply_custom_updates_var,
+        )
+        custom_check.grid(row=row, column=0, sticky="w", pady=1)
+        _Tooltip(
+            custom_check,
+            "Requires the source/target custom field CSVs and rewrites any custom_field_id values inside the copied JSON.",
+        )
+        row += 1
+
         json_btn = ttk.Button(
             scroll_frame,
             text="Update selected JSON with form/custom field mappings",
             command=self._trigger_json_update,
         )
         json_btn.grid(row=row, column=0, sticky="w", pady=(6, 10))
+        _Tooltip(
+            json_btn,
+            "Copies the configuration JSON into the output folder and runs the selected update passes.",
+        )
         row += 1
 
         # Log output
@@ -260,7 +345,8 @@ class MigrationApp(tk.Tk):
     def _add_file_picker(self, parent: ttk.Frame, row: int, selection: FileSelection) -> None:
         frame = ttk.Frame(parent)
         frame.grid(row=row, column=0, sticky="ew", pady=2)
-        ttk.Label(frame, text=selection.label, width=28, anchor="w").pack(side="left")
+        label_widget = ttk.Label(frame, text=selection.label, width=28, anchor="w")
+        label_widget.pack(side="left")
         entry = ttk.Entry(frame, textvariable=selection.variable, width=70)
         entry.pack(side="left", padx=(4, 4), fill="x", expand=True)
 
@@ -274,7 +360,12 @@ class MigrationApp(tk.Tk):
             if file_path:
                 selection.variable.set(file_path)
 
-        ttk.Button(frame, text="Browse…", command=browse).pack(side="left")
+        browse_button = ttk.Button(frame, text="Browse...", command=browse)
+        browse_button.pack(side="left")
+        if selection.tooltip:
+            _Tooltip(label_widget, selection.tooltip)
+            _Tooltip(entry, selection.tooltip)
+            _Tooltip(browse_button, selection.tooltip)
 
     def _add_directory_picker(
         self,
@@ -294,7 +385,7 @@ class MigrationApp(tk.Tk):
             if directory:
                 variable.set(directory)
 
-        ttk.Button(frame, text="Browse…", command=browse).pack(side="left")
+        ttk.Button(frame, text="Browse...", command=browse).pack(side="left")
 
     def _add_labeled_entry(
         self,
@@ -462,49 +553,61 @@ class MigrationApp(tk.Tk):
 
     def _trigger_json_update(self) -> None:
         def task() -> None:
-            source_forms = self._require_path("Source forms library", self.source_forms_var.get())
-            target_forms = self._require_path("Target forms library", self.target_forms_var.get())
-            source_questions = self._require_path("Source questions bank", self.source_questions_var.get())
-            target_questions = self._require_path("Target questions bank", self.target_questions_var.get())
+            apply_forms = bool(self.apply_form_updates_var.get())
+            apply_custom = bool(self.apply_custom_updates_var.get())
+            if not (apply_forms or apply_custom):
+                raise ValueError("Enable at least one update pass before running the JSON rewrite.")
+
             target_json = self._require_path("Target configuration JSON", self.target_json_var.get())
             output_dir = self._ensure_directory("Updated JSON output folder", self.updated_json_dir_var.get())
-
-            source_csv = self._require_path("Source custom fields CSV", self.custom_source_csv_var.get())
-            target_csv = self._require_path("Target custom fields CSV", self.custom_target_csv_var.get())
 
             output_json = output_dir / f"Updated_{Path(target_json).name}"
             shutil.copy2(target_json, output_json)
             self.append_log(f"Copied {target_json} -> {output_json}")
 
-            self.append_log("Applying form_and_question_id_updater.py to the copied JSON…")
-            stats = self._capture_output(
-                form_and_question_id_updater.sync_ids,
-                source_forms,
-                target_forms,
-                source_questions,
-                target_questions,
-                output_json,
-                True,
-            )
-            total_updates = sum(stats.values())
-            self.append_log(f"Updated {total_updates} workflow ID references in {output_json.name}.")
+            if apply_forms:
+                source_forms = self._require_path("Source forms library", self.source_forms_var.get())
+                target_forms = self._require_path("Target forms library", self.target_forms_var.get())
+                source_questions = self._require_path("Source questions bank", self.source_questions_var.get())
+                target_questions = self._require_path("Target questions bank", self.target_questions_var.get())
 
-            argv: list[str] = [
-                "--source-profile",
-                str(target_json),
-                "--target-profile",
-                str(output_json),
-                "--source-csv",
-                str(source_csv),
-                "--target-csv",
-                str(target_csv),
-                "--output",
-                str(output_json),
-            ]
-            self.append_log("Applying custom_field_id_updater.py with selected CSV mappings…")
-            exit_code = self._capture_output(custom_field_id_updater.main, argv)
-            if exit_code not in (0, None):
-                raise RuntimeError(f"custom_field_id_updater.py failed with exit code {exit_code}")
+                self.append_log("Applying form_and_question_id_updater.py to the copied JSON…")
+                stats = self._capture_output(
+                    form_and_question_id_updater.sync_ids,
+                    source_forms,
+                    target_forms,
+                    source_questions,
+                    target_questions,
+                    output_json,
+                    True,
+                )
+                total_updates = sum(stats.values())
+                self.append_log(f"Updated {total_updates} workflow ID references in {output_json.name}.")
+            else:
+                self.append_log("Skipping form_and_question_id_updater.py (option disabled).")
+
+            if apply_custom:
+                source_csv = self._require_path("Source custom fields CSV", self.custom_source_csv_var.get())
+                target_csv = self._require_path("Target custom fields CSV", self.custom_target_csv_var.get())
+
+                argv: list[str] = [
+                    "--source-profile",
+                    str(target_json),
+                    "--target-profile",
+                    str(output_json),
+                    "--source-csv",
+                    str(source_csv),
+                    "--target-csv",
+                    str(target_csv),
+                    "--output",
+                    str(output_json),
+                ]
+                self.append_log("Applying custom_field_id_updater.py with selected CSV mappings…")
+                exit_code = self._capture_output(custom_field_id_updater.main, argv)
+                if exit_code not in (0, None):
+                    raise RuntimeError(f"custom_field_id_updater.py failed with exit code {exit_code}")
+            else:
+                self.append_log("Skipping custom_field_id_updater.py (option disabled).")
 
             self.append_log(f"Final JSON written to {output_json}")
 
