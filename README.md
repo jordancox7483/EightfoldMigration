@@ -2,7 +2,7 @@
 
 > **Looking for a quick start?** A Windows executable (`EightfoldMigrationHelper.exe`) is published on the releases page. It is provided for personal use, is alpha quality, and may not behave exactly like the scripts. If you hit issues, fall back to the raw Python utilities. See [GUI_USAGE.md](GUI_USAGE.md) for setup, usage, and build steps.
 
-# Workflow ID Sync Utilities
+# Form and Question ID Update Utilities
 
 This repository contains some small Python scripts that help reconcile form and question IDs between environments when migrating configuration data. All scripts work with the raw JSON from config.
 
