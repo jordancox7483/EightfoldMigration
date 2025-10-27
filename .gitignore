@@ -17,4 +17,5 @@ build/
 playwright-browsers/
 *.spec
 *.exe
+eightfold_migration_helper_config.json
 
