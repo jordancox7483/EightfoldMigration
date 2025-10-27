@@ -19,9 +19,11 @@ installation is required on the target machine.
 from __future__ import annotations
 
 import io
+import json
 import os
 import queue
 import shutil
+import sys
 import threading
 import tkinter as tk
 from contextlib import redirect_stderr, redirect_stdout
@@ -39,8 +41,22 @@ import form_and_question_id_updater
 # Ensure Playwright downloads live alongside the packaged executable.  During
 # development this directory may not exist yet; build instructions cover
 # seeding it before running PyInstaller.
-DEFAULT_BROWSER_DIR = Path(__file__).resolve().parent / "playwright-browsers"
+def _get_application_directory() -> Path:
+    if getattr(sys, "frozen", False):
+        # PyInstaller executable
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parent
+
+
+APP_DIR = _get_application_directory()
+
+# Ensure Playwright downloads live alongside the packaged executable.  During
+# development this directory may not exist yet; build instructions cover
+# seeding it before running PyInstaller.
+DEFAULT_BROWSER_DIR = APP_DIR / "playwright-browsers"
 os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", str(DEFAULT_BROWSER_DIR))
+
+CONFIG_BASENAME = "eightfold_migration_helper_config.json"
 
 
 @dataclass
@@ -63,9 +79,18 @@ class MigrationApp(tk.Tk):
 
         self.log_queue: queue.Queue[str] = queue.Queue()
         self._running_task = False
+        self._suspend_save = False
+        self._save_scheduled = False
+        self._config_path: Path | None = None
+        self._config_locations = [
+            APP_DIR / CONFIG_BASENAME,
+            Path.home() / CONFIG_BASENAME,
+        ]
 
         self._build_variables()
+        self._load_config()
         self._build_widgets()
+        self._register_persistent_traces()
         self.after(100, self._process_log_queue)
 
     # ------------------------------------------------------------------ UI setup
@@ -91,6 +116,113 @@ class MigrationApp(tk.Tk):
         self.apply_custom_updates_var = tk.BooleanVar(value=True)
 
         self.status_var = tk.StringVar()
+
+        self._persistent_vars: dict[str, tk.Variable] = {
+            "source_questions": self.source_questions_var,
+            "source_forms": self.source_forms_var,
+            "target_questions": self.target_questions_var,
+            "target_forms": self.target_forms_var,
+            "target_json": self.target_json_var,
+            "scraper_url": self.scraper_url_var,
+            "scraper_output_dir": self.scraper_output_dir_var,
+            "scraper_output_name": self.scraper_output_name_var,
+            "custom_source_csv": self.custom_source_csv_var,
+            "custom_target_csv": self.custom_target_csv_var,
+            "updated_libraries_dir": self.updated_libraries_dir_var,
+            "updated_json_dir": self.updated_json_dir_var,
+            "apply_form_updates": self.apply_form_updates_var,
+            "apply_custom_updates": self.apply_custom_updates_var,
+        }
+
+    def _load_config(self) -> None:
+        self._suspend_save = True
+        data: dict[str, object] | None = None
+        for candidate in self._config_locations:
+            try:
+                text = candidate.read_text(encoding="utf-8")
+            except FileNotFoundError:
+                continue
+            except OSError as exc:
+                self.append_log(f"WARNING: Unable to read config file {candidate}: {exc}")
+                continue
+            try:
+                data = json.loads(text)
+            except json.JSONDecodeError as exc:
+                self.append_log(f"WARNING: Ignoring corrupted config file {candidate}: {exc}")
+                continue
+            else:
+                self._config_path = candidate
+                break
+
+        if isinstance(data, dict):
+            for key, var in self._persistent_vars.items():
+                if key not in data:
+                    continue
+                value = data[key]
+                try:
+                    if isinstance(var, tk.BooleanVar):
+                        var.set(bool(value))
+                    else:
+                        var.set(value if value is not None else "")
+                except tk.TclError:
+                    continue
+
+        self._suspend_save = False
+
+    def _register_persistent_traces(self) -> None:
+        self._trace_tokens: list[tuple[tk.Variable, str]] = []
+        for var in self._persistent_vars.values():
+            token = var.trace_add("write", self._on_persistent_var_change)
+            self._trace_tokens.append((var, token))
+
+    def _on_persistent_var_change(self, *_args: str) -> None:
+        if self._suspend_save:
+            return
+        if self._save_scheduled:
+            return
+        self._save_scheduled = True
+        self.after_idle(self._flush_pending_save)
+
+    def _flush_pending_save(self) -> None:
+        self._save_scheduled = False
+        self._save_config()
+
+    def _save_config(self) -> None:
+        if self._suspend_save:
+            return
+
+        data: dict[str, object] = {}
+        for key, var in self._persistent_vars.items():
+            value = var.get()
+            if isinstance(var, tk.BooleanVar):
+                value = bool(value)
+            data[key] = value
+
+        serialized = json.dumps(data, indent=2)
+
+        locations = []
+        if self._config_path:
+            locations.append(self._config_path)
+        for candidate in self._config_locations:
+            if candidate not in locations:
+                locations.append(candidate)
+
+        failures: list[str] = []
+        for candidate in locations:
+            try:
+                candidate.parent.mkdir(parents=True, exist_ok=True)
+                candidate.write_text(serialized, encoding="utf-8")
+                self._config_path = candidate
+                return
+            except OSError as exc:
+                failures.append(f"{candidate}: {exc}")
+
+        if failures:
+            self.append_log(
+                "WARNING: Unable to write configuration to disk. "
+                "Errors: " + "; ".join(failures)
+            )
+
 
     def _build_widgets(self) -> None:
         main = ttk.Frame(self, padding=12)
