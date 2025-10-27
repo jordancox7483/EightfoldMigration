@@ -189,9 +189,9 @@ class MigrationApp(tk.Tk):
         ttk.Label(
             scroll_frame,
             text=(
-                "Tip: This utility scrapes all custom fields from Eightfold when provided login details.  Run the scraper twice. Export the source environment first and save it as "
+                "Tip: This utility page-scrapes all custom fields from Eightfold when provided login details.  Run the scraper twice. Export the source environment first and save it as "
                 "'source.csv', then export the target environment and save it as 'target.csv'. "
-                "Those files feed into custom_field_id_updater.py."
+                "Those files feed into Custom Field ID Remap (custom_field_id_updater.py)."
             ),
             wraplength=680,
             foreground="#555555",
@@ -265,7 +265,7 @@ class MigrationApp(tk.Tk):
 
         ttk.Label(
             scroll_frame,
-            text="Tip: This updates forms and questions JSON to new values, including dependent, child, and embeded ID values.  The generated files live alongside the originals so you can diff them before importing.",
+            text="Tip: This fixer updates the form and question library JSON files by matching question attributes. It updates question IDs in the forms library as well as dependent, child, and embedded ID values in both libraries.  New files are created so you can compare them before importing.",
             wraplength=680,
             foreground="#555555",
         ).grid(row=row, column=0, sticky="w", pady=(0, 10))
@@ -286,7 +286,7 @@ class MigrationApp(tk.Tk):
 
         ttk.Label(
             scroll_frame,
-            text="Choose which passes to apply when rewriting the selected JSON so you can split the work across multiple runs.",
+            text="This tool updates the target configuration JSON selected at the top.  It can update form, question, and custom field IDs all at once or let you split the work across multiple runs as needed.",
             wraplength=680,
             foreground="#555555",
         ).grid(row=row, column=0, sticky="w", pady=(0, 6))
