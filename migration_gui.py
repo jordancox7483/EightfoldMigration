@@ -887,7 +887,19 @@ class MigrationApp(tk.Tk):
             if exit_code not in (0, None):
                 raise RuntimeError(f"config_json_export.py failed with exit code {exit_code}")
 
+            self.append_log(f"Opening export folder: {output_dir}")
+            self._open_folder(output_dir)
+
         self._run_in_thread(task)
+
+    def _open_folder(self, path: Path) -> None:
+        try:
+            if sys.platform.startswith("win"):
+                os.startfile(path)  # type: ignore[attr-defined]
+                return
+        except OSError as exc:
+            self.append_log(f"WARNING: Unable to open folder {path}: {exc}")
+            return
 
 
 class _Tooltip:
