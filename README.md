@@ -11,6 +11,9 @@ This repository contains some small Python scripts that help reconcile form and 
 - `report_workflow_id_mappings.py` — Produces CSV tables summarising every form and question mapping, which you can use for manual VLOOKUPs or spot checks.
 - `custom_fields_scraper.py`, Exports the field names and IDs from the Eightfold Custom Fields integration page. The script automates pagination and writes the results to a CSV file.  Needs login info (pass as variables DO NOT store in file) and confirm EF URL - for both source and target (run twice, inform script of the desired output name, the next script below uses those outputs so probably stick with "source.csv" and "target.csv")
 - `custom_field_id_updater.py` Rewrites the `custom_field_id` values embedded in a JSON configuration. It compares the legacy IDs from a "source" CSV to the replacement IDs in a "target" CSV, then walks the target profile JSON and swaps anything it recognises.
+- `config_json_scraper.py` Logs into the admin console, discovers configuration pages, opens the Advanced tab (or direct JSON page), and exports config JSON to per-page files. Credentials are passed via env vars or prompts. Output defaults to `C:\Users\Jordan\OneDrive\Documents\EightfoldCOnfigScrape`.
+- `config_json_discover.py` Builds a manifest (`config_json_targets.json`) of pages that expose config JSON. Run occasionally to refresh the list.
+- `config_json_export.py` Reads the manifest and exports JSON for each target without re-discovering navigation. Use `--resume` to skip configs already exported.
 
 The sections below walk through installing prerequisites, opening the project in Visual Studio Code, and running each script with new exports.
 
@@ -240,6 +243,8 @@ The repository now includes `custom_fields_scraper.py`, a helper that exports th
 
 ### Basic usage
 
+
+
 If your files live in the project root and use the default names (`source_profile_display.json`, `target_profile_display.json`, `source.csv`, `target.csv`), run:
 
 ```bash
@@ -261,7 +266,39 @@ The script prints a summary of how many IDs were updated, highlights any custom 
 Add `--dry-run` to preview the summary without editing the JSON. To write the output to a separate file instead of overwriting the target profile, provide `--output path\to\profile.json`.
 
 
-## 10. Quick reference
+## 10. Scraping admin JSON configuration (config_json_scraper.py)
+
+This script logs into the Eightfold admin console, discovers configuration pages from the left nav, opens the Advanced tab when available (or uses direct JSON pages when there is no Advanced tab), and saves the JSON config to one file per page. Output goes to `C:\Users\Jordan\OneDrive\Documents\EightfoldCOnfigScrape` by default.
+
+### Discovery + export flow (recommended)
+
+```powershell
+$env:EIGHTFOLD_USERNAME = "user@example.com"
+$env:EIGHTFOLD_PASSWORD = "your-password"
+python config_json_discover.py --subdomain app-wu
+python config_json_export.py --resume
+```
+
+### Basic usage
+
+```powershell
+$env:EIGHTFOLD_USERNAME = "user@example.com"
+$env:EIGHTFOLD_PASSWORD = "your-password"
+python config_json_scraper.py --subdomain app-wu
+```
+
+### Notes
+
+- Credentials are read from environment variables or prompts; they are not stored in the script.
+- The crawler skips UI-only or non-exportable sections: Home, Surveys, Apps, Feedback & Assessments (Forms Library, Question Bank), Integration (File Ingestion, API Ingestion, Sync Health, Diagnostics, Health Reports, SFTP Configuration), Analytics (Talent Lake, Provision Dashboards, Refresh Data Warehouse), and most Users & Permissions pages (only Permission & Roles is kept).
+- Some pages load slowly (for example `workflow_config`); use `--slow-page-wait` or `--manual-continue` if needed.
+- Use `--output-dir` to change the export folder.
+- Use `--include-text` to target a single nav entry (for example, `--include-text "Home, Feeds, Career Hub Features"`).
+- The default start page is `/integrations`; override with `--start-url` or `--start-path` if needed.
+- The UI includes an Admin Config Scrape section that runs discovery/export; discovery writes `config_json_targets.json` next to the app config file and export writes to the selected output folder.
+- All scripts run headless by default; add `--headed` to watch the browser.
+
+## 11. Quick reference
 
 | Task | Command |
 | --- | --- |
@@ -274,6 +311,11 @@ Add `--dry-run` to preview the summary without editing the JSON. To write the ou
 | Update dependency question IDs (dry run) | `python dependency_question_id_updater.py --dry-run` |
 | Run report script | `python report_workflow_id_mappings.py` |
 | Export report to file | `python report_workflow_id_mappings.py > workflow_id_mappings.csv` |
+| Discover admin JSON targets | `python config_json_discover.py --subdomain app-wu` |
+| Export admin JSON configs | `python config_json_export.py --resume` |
+| Scrape admin JSON configs | `python config_json_scraper.py --subdomain app-wu` |
 | Update profile display IDs | `python custom_field_id_updater.py --dry-run` |
 
 Keep this README open in VS Code (pin the tab) so the step-by-step instructions are always within reach when you revisit the project.
+
+---

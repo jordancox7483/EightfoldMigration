@@ -1,0 +1,1129 @@
+{
+  "generated_at": "2026-01-28T19:03:34.684475+00:00",
+  "base_url": "https://app-wu.eightfold.ai",
+  "count": 110,
+  "entries": [
+    {
+      "label": "Permission & Roles",
+      "group": "Users & Permissions",
+      "url": "https://app-wu.eightfold.ai/integrations/roles_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/roles_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:41:56.388430+00:00"
+    },
+    {
+      "label": "Email & SMS Integration",
+      "group": "Integration",
+      "url": "https://app-wu.eightfold.ai/integrations/email_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/email_config",
+      "mode": "direct",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:42:24.134872+00:00"
+    },
+    {
+      "label": "Single Sign-On",
+      "group": "Integration",
+      "url": "https://app-wu.eightfold.ai/integrations/sso_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/sso_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:42:40.584429+00:00"
+    },
+    {
+      "label": "LinkedIn CRM Connect",
+      "group": "Integration",
+      "url": "https://app-wu.eightfold.ai/integrations/linkedin_crm_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/linkedin_crm_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:42:58.782791+00:00"
+    },
+    {
+      "label": "Eightfold API",
+      "group": "Integration",
+      "url": "https://app-wu.eightfold.ai/integrations/api_server_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/api_server_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:43:14.858570+00:00"
+    },
+    {
+      "label": "Internationalization & Display Text Override",
+      "group": "Platform Tools",
+      "url": "https://app-wu.eightfold.ai/integrations/i18n_override_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/i18n_override_config?tab_id=i18n_override",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:43:33.444283+00:00"
+    },
+    {
+      "label": "Dataflow Configuration",
+      "group": "Platform Tools",
+      "url": "https://app-wu.eightfold.ai/integrations/dataflow_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/dataflow_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:44:57.589629+00:00"
+    },
+    {
+      "label": "Top Level Branding",
+      "group": "Platform Tools",
+      "url": "https://app-wu.eightfold.ai/integrations/ui_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/ui_config",
+      "mode": "direct",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:45:18.230941+00:00"
+    },
+    {
+      "label": "Eightfold Training",
+      "group": "Platform Tools",
+      "url": "https://app-wu.eightfold.ai/integrations/ef_training_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/ef_training_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:45:33.895423+00:00"
+    },
+    {
+      "label": "Search Data",
+      "group": "Platform Tools",
+      "url": "https://app-wu.eightfold.ai/integrations/solr/query",
+      "config_url": "https://app-wu.eightfold.ai/integrations/solr/query",
+      "mode": "direct",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:45:41.090596+00:00"
+    },
+    {
+      "label": "Manage Cookies & IP Blocking",
+      "group": "Security & Compliance",
+      "url": "https://app-wu.eightfold.ai/integrations/user_blocklist_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/user_blocklist_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:46:57.091945+00:00"
+    },
+    {
+      "label": "Session Timeout",
+      "group": "Security & Compliance",
+      "url": "https://app-wu.eightfold.ai/integrations/custom_session_timeout_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/custom_session_timeout_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:47:16.353431+00:00"
+    },
+    {
+      "label": "Diversity Dashboard",
+      "group": "Analytics",
+      "url": "https://app-wu.eightfold.ai/integrations/diversity_dashboard_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/diversity_dashboard_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:48:04.091473+00:00"
+    },
+    {
+      "label": "Screening Dashboard",
+      "group": "Analytics",
+      "url": "https://app-wu.eightfold.ai/integrations/screening_dashboard_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/screening_dashboard_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:48:20.105970+00:00"
+    },
+    {
+      "label": "Pipeline & Workflow",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/workflow_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/workflow_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:48:50.446237+00:00"
+    },
+    {
+      "label": "Pipeline Overview",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/position_overview_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/position_overview_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:49:06.974020+00:00"
+    },
+    {
+      "label": "Position Kanban Config",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/position_kanban_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/position_kanban_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:49:22.682051+00:00"
+    },
+    {
+      "label": "Pipeline Actions",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/pipeline_actions_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/pipeline_actions_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:49:38.886009+00:00"
+    },
+    {
+      "label": "Interview Feedback",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/interview_feedback_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/interview_feedback_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:49:56.393159+00:00"
+    },
+    {
+      "label": "Task Widget",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/task_widget_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/task_widget_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:50:12.811841+00:00"
+    },
+    {
+      "label": "Scheduling",
+      "group": "Scheduling",
+      "url": "https://app-wu.eightfold.ai/integrations/scheduling_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/scheduling_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:50:29.543882+00:00"
+    },
+    {
+      "label": "Candidate Experience Navbar",
+      "group": "Scheduling",
+      "url": "https://app-wu.eightfold.ai/integrations/navbar_config::CANDIDATE_EXPERIENCE",
+      "config_url": "https://app-wu.eightfold.ai/integrations/navbar_config::CANDIDATE_EXPERIENCE?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:50:47.223952+00:00"
+    },
+    {
+      "label": "Profile Display",
+      "group": "Profile",
+      "url": "https://app-wu.eightfold.ai/integrations/profile_display_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/profile_display_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:51:04.022139+00:00"
+    },
+    {
+      "label": "Profile Settings",
+      "group": "Profile",
+      "url": "https://app-wu.eightfold.ai/integrations/ta_profile_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/ta_profile_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:51:21.560086+00:00"
+    },
+    {
+      "label": "Profile Layout",
+      "group": "Profile",
+      "url": "https://app-wu.eightfold.ai/integrations/profile_v2_base_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/profile_v2_base_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:51:38.152021+00:00"
+    },
+    {
+      "label": "Candidate Traits",
+      "group": "Profile",
+      "url": "https://app-wu.eightfold.ai/integrations/traits_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/traits_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:51:54.502464+00:00"
+    },
+    {
+      "label": "Tag management",
+      "group": "Profile",
+      "url": "https://app-wu.eightfold.ai/integrations/tag_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/tag_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:52:10.537926+00:00"
+    },
+    {
+      "label": "Masking & Blind Review",
+      "group": "Profile",
+      "url": "https://app-wu.eightfold.ai/integrations/masking_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/masking_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:52:26.540921+00:00"
+    },
+    {
+      "label": "Recruiting Navbar",
+      "group": "Branding",
+      "url": "https://app-wu.eightfold.ai/integrations/navbar_config::TALENT_ACQUISITION",
+      "config_url": "https://app-wu.eightfold.ai/integrations/navbar_config::TALENT_ACQUISITION?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:52:44.055869+00:00"
+    },
+    {
+      "label": "Recruiting Branding Config",
+      "group": "Branding",
+      "url": "https://app-wu.eightfold.ai/integrations/branding_config::TALENT_ACQUISITION",
+      "config_url": "https://app-wu.eightfold.ai/integrations/branding_config::TALENT_ACQUISITION?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:53:00.082581+00:00"
+    },
+    {
+      "label": "Candidate Experience Branding Config",
+      "group": "Branding",
+      "url": "https://app-wu.eightfold.ai/integrations/branding_config::CANDIDATE_EXPERIENCE",
+      "config_url": "https://app-wu.eightfold.ai/integrations/branding_config::CANDIDATE_EXPERIENCE?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:53:16.174901+00:00"
+    },
+    {
+      "label": "Positions Home",
+      "group": "Requisition",
+      "url": "https://app-wu.eightfold.ai/integrations/positions_home_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/positions_home_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:53:32.361846+00:00"
+    },
+    {
+      "label": "Position Base",
+      "group": "Requisition",
+      "url": "https://app-wu.eightfold.ai/integrations/position_base_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/position_base_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:53:38.843346+00:00"
+    },
+    {
+      "label": "Calibration",
+      "group": "Requisition",
+      "url": "https://app-wu.eightfold.ai/integrations/calibration_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/calibration_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:53:58.303649+00:00"
+    },
+    {
+      "label": "Candidate Bulk Actions",
+      "group": "Bulk actions",
+      "url": "https://app-wu.eightfold.ai/integrations/bulk_action_settings_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/bulk_action_settings_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:54:14.421181+00:00"
+    },
+    {
+      "label": "Events",
+      "group": "Events",
+      "url": "https://app-wu.eightfold.ai/integrations/planned_event_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/planned_event_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:54:31.683206+00:00"
+    },
+    {
+      "label": "Events Home",
+      "group": "Events",
+      "url": "https://app-wu.eightfold.ai/integrations/planned_event_home_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/planned_event_home_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:54:47.925671+00:00"
+    },
+    {
+      "label": "Events - Custom fields",
+      "group": "Events",
+      "url": "https://app-wu.eightfold.ai/integrations/planned_event_custom_fields_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/planned_event_custom_fields_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:55:04.807693+00:00"
+    },
+    {
+      "label": "Planned Event Workflow Config",
+      "group": "Events",
+      "url": "https://app-wu.eightfold.ai/integrations/planned_event_workflow_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/planned_event_workflow_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:55:32.314852+00:00"
+    },
+    {
+      "label": "Community Home",
+      "group": "Talent Pool",
+      "url": "https://app-wu.eightfold.ai/integrations/community_home_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/community_home_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:55:50.605302+00:00"
+    },
+    {
+      "label": "Community Pipeline",
+      "group": "Talent Pool",
+      "url": "https://app-wu.eightfold.ai/integrations/community_pipeline_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/community_pipeline_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:56:06.500654+00:00"
+    },
+    {
+      "label": "Community Workflow",
+      "group": "Talent Pool",
+      "url": "https://app-wu.eightfold.ai/integrations/community_workflow_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/community_workflow_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:56:40.162660+00:00"
+    },
+    {
+      "label": "Job Distribution Config",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/job_distribution_consolidation_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/job_distribution_consolidation_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:56:56.053361+00:00"
+    },
+    {
+      "label": "Custom Action Rules",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/rules_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/rules_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:57:12.783908+00:00"
+    },
+    {
+      "label": "Chrome extension",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/extension_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/extension_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:57:29.034789+00:00"
+    },
+    {
+      "label": "Messaging Template Variables",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/messaging_template_variables_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/messaging_template_variables_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:57:45.172561+00:00"
+    },
+    {
+      "label": "Global Search",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/global_search_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/global_search_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:58:00.952421+00:00"
+    },
+    {
+      "label": "Diversity",
+      "group": "Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/diversity_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/diversity_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:58:16.596722+00:00"
+    },
+    {
+      "label": "PCS IX",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/pcsx_base_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/pcsx_base_config",
+      "mode": "direct",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:58:25.226171+00:00"
+    },
+    {
+      "label": "PCS IX Theming",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/branding_config::PCS",
+      "config_url": "https://app-wu.eightfold.ai/integrations/branding_config::PCS?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:58:41.268210+00:00"
+    },
+    {
+      "label": "PCS IX Navbar",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/navbar_config::PCS",
+      "config_url": "https://app-wu.eightfold.ai/integrations/navbar_config::PCS?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:58:58.520993+00:00"
+    },
+    {
+      "label": "PCS IX Profile",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/candidate_profile_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/candidate_profile_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:59:14.549162+00:00"
+    },
+    {
+      "label": "PCS IX Search Options",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/pcsx_search_options_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/pcsx_search_options_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:59:30.586954+00:00"
+    },
+    {
+      "label": "PCS IX Candidate Notifications",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/candidate_notifications_config::in_app",
+      "config_url": "https://app-wu.eightfold.ai/integrations/candidate_notifications_config::in_app?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T16:59:46.397059+00:00"
+    },
+    {
+      "label": "[Candidate] Notifications",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/notification_config::product_configs>candidate",
+      "config_url": "https://app-wu.eightfold.ai/integrations/notification_config::product_configs%3Ecandidate?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:00:03.591515+00:00"
+    },
+    {
+      "label": "Country Region Config",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/country_region_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/country_region_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:00:24.124792+00:00"
+    },
+    {
+      "label": "[Candidate] Password Policy",
+      "group": "Candidate Login Sign-up",
+      "url": "https://app-wu.eightfold.ai/integrations/password_policy_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/password_policy_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:00:43.112399+00:00"
+    },
+    {
+      "label": "[Candidate] Login Signup",
+      "group": "Candidate Login Sign-up",
+      "url": "https://app-wu.eightfold.ai/integrations/login_signup_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/login_signup_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:00:59.868634+00:00"
+    },
+    {
+      "label": "Referrals & Talent Network",
+      "group": "Referrals",
+      "url": "https://app-wu.eightfold.ai/integrations/smart_apply_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/smart_apply_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:01:17.692333+00:00"
+    },
+    {
+      "label": "Referrals Requiring Candidate Application",
+      "group": "Referrals",
+      "url": "https://app-wu.eightfold.ai/integrations/referral_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/referral_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:01:33.348191+00:00"
+    },
+    {
+      "label": "Career Site XML Feeds",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/job_feed_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/job_feed_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:01:49.341737+00:00"
+    },
+    {
+      "label": "Multiple Domains List",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/multiple_domains_list",
+      "config_url": "https://app-wu.eightfold.ai/integrations/multiple_domains_list?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:02:05.047020+00:00"
+    },
+    {
+      "label": "[Candidate] Copilot",
+      "group": "PCS IX",
+      "url": "https://app-wu.eightfold.ai/integrations/chatbotx_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/chatbotx_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:02:21.257588+00:00"
+    },
+    {
+      "label": "Home, Feeds, Career Hub Features",
+      "group": "Career Hub Overview",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs%3Eemployee?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:02:44.655937+00:00"
+    },
+    {
+      "label": "Marketplace - Jobs, Projects, Courses, Development Plans",
+      "group": "Career Hub Overview",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_explore_config::product_configs>employee",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_explore_config::product_configs%3Eemployee?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:03:05.492052+00:00"
+    },
+    {
+      "label": "Profile and People Search",
+      "group": "Career Hub Overview",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_profile_config::product_configs>employee",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_profile_config::product_configs%3Eemployee?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:03:26.293362+00:00"
+    },
+    {
+      "label": "[Employee] CareerHub Account Settings",
+      "group": "Career Hub Overview",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>settings_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs%3Eemployee%3Esettings_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:03:43.728800+00:00"
+    },
+    {
+      "label": "Internal Mobility",
+      "group": "Career Planning & Internal Mobility",
+      "url": "https://app-wu.eightfold.ai/integrations/ijp_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/ijp_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:03:50.336110+00:00"
+    },
+    {
+      "label": "Employee Seniority Levels",
+      "group": "Career Planning & Internal Mobility",
+      "url": "https://app-wu.eightfold.ai/integrations/calibration_config::seniority_level",
+      "config_url": "https://app-wu.eightfold.ai/integrations/calibration_config::seniority_level?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:04:38.618673+00:00"
+    },
+    {
+      "label": "Career Planner",
+      "group": "Career Planning & Internal Mobility",
+      "url": "https://app-wu.eightfold.ai/integrations/career_planner_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_planner_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:04:57.569029+00:00"
+    },
+    {
+      "label": "[Employee] Career Hub Map Explorer",
+      "group": "Career Planning & Internal Mobility",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>map_explorer_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs%3Eemployee%3Emap_explorer_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:05:13.549028+00:00"
+    },
+    {
+      "label": "Mentorship",
+      "group": "Career Development",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>people",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs%3Eemployee%3Epeople?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:05:46.783083+00:00"
+    },
+    {
+      "label": "Development Plan",
+      "group": "Career Development",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>upskilling",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs%3Eemployee%3Eupskilling?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:06:03.537182+00:00"
+    },
+    {
+      "label": "Project Marketplace",
+      "group": "Projects",
+      "url": "https://app-wu.eightfold.ai/integrations/project_marketplace_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/project_marketplace_config",
+      "mode": "direct",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:06:12.228705+00:00"
+    },
+    {
+      "label": "Project Marketplace - My Projects, Create/Edit Project",
+      "group": "Projects",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_projectmarketplace_config::product_configs>employee",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_projectmarketplace_config::product_configs%3Eemployee?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:06:29.231274+00:00"
+    },
+    {
+      "label": "Project Marketplace - Manage Project Creation Templates",
+      "group": "Projects",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_projects_v2_config::product_configs>employee",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_projects_v2_config::product_configs%3Eemployee?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:06:46.035440+00:00"
+    },
+    {
+      "label": "Project Marketplace Pipeline Page",
+      "group": "Projects",
+      "url": "https://app-wu.eightfold.ai/integrations/project_mp_workflow_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/project_mp_workflow_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:07:12.519725+00:00"
+    },
+    {
+      "label": "Manager and HRBP Features",
+      "group": "Manager and HRBP",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>manager_hrbp_features",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs%3Eemployee%3Emanager_hrbp_features?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:07:29.338238+00:00"
+    },
+    {
+      "label": "My Team V2",
+      "group": "Manager and HRBP",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>team_planning>my_team",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs%3Eemployee%3Eteam_planning%3Emy_team?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:07:46.810872+00:00"
+    },
+    {
+      "label": "Mobile App",
+      "group": "Career Hub Overview",
+      "url": "https://app-wu.eightfold.ai/integrations/career_hub_mobileapp_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/career_hub_mobileapp_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:08:29.150506+00:00"
+    },
+    {
+      "label": "Notifications",
+      "group": "Career Hub Overview",
+      "url": "https://app-wu.eightfold.ai/integrations/notification_config::product_configs>employee",
+      "config_url": "https://app-wu.eightfold.ai/integrations/notification_config::product_configs%3Eemployee?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:08:51.923948+00:00"
+    },
+    {
+      "label": "Talent Flex",
+      "group": "Talent Flex",
+      "url": "https://app-wu.eightfold.ai/integrations/talent_flex_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/talent_flex_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:09:07.899720+00:00"
+    },
+    {
+      "label": "Resource Management",
+      "group": "Core Setup",
+      "url": "https://app-wu.eightfold.ai/integrations/resourcing_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/resourcing_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:09:24.026051+00:00"
+    },
+    {
+      "label": "Resourcing Homepage",
+      "group": "Core Setup",
+      "url": "https://app-wu.eightfold.ai/integrations/rm_homepage_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/rm_homepage_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:09:39.879123+00:00"
+    },
+    {
+      "label": "RM Navbar",
+      "group": "Core Setup",
+      "url": "https://app-wu.eightfold.ai/integrations/navbar_config::RESOURCE_MANAGEMENT",
+      "config_url": "https://app-wu.eightfold.ai/integrations/navbar_config::RESOURCE_MANAGEMENT?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:09:56.982909+00:00"
+    },
+    {
+      "label": "Demands Listing",
+      "group": "Demand Management",
+      "url": "https://app-wu.eightfold.ai/integrations/demands_home_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/demands_home_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T17:10:13.859642+00:00"
+    },
+    {
+      "label": "Demand Overview",
+      "group": "Demand Management",
+      "url": "https://app-wu.eightfold.ai/integrations/position_overview_config::demand_overview",
+      "config_url": "https://app-wu.eightfold.ai/integrations/position_overview_config::demand_overview?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:56:34.381095+00:00"
+    },
+    {
+      "label": "Demand Calibration",
+      "group": "Demand Management",
+      "url": "https://app-wu.eightfold.ai/integrations/calibration_config::demand_calibration",
+      "config_url": "https://app-wu.eightfold.ai/integrations/calibration_config::demand_calibration?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:56:50.603328+00:00"
+    },
+    {
+      "label": "Demand Calibration Sync",
+      "group": "Demand Management",
+      "url": "https://app-wu.eightfold.ai/integrations/calibration_app_config::Demand",
+      "config_url": "https://app-wu.eightfold.ai/integrations/calibration_app_config::Demand?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:57:07.131708+00:00"
+    },
+    {
+      "label": "Demand Pipeline",
+      "group": "Staffing Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/demand_workflow_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/demand_workflow_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:57:34.610592+00:00"
+    },
+    {
+      "label": "Demand Pipeline Actions",
+      "group": "Staffing Pipeline",
+      "url": "https://app-wu.eightfold.ai/integrations/pipeline_actions_config::demand_pipeline_actions",
+      "config_url": "https://app-wu.eightfold.ai/integrations/pipeline_actions_config::demand_pipeline_actions?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:57:54.647402+00:00"
+    },
+    {
+      "label": "Resourcing Profile Layout",
+      "group": "Profile",
+      "url": "https://app-wu.eightfold.ai/integrations/resourcing_profile_base_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/resourcing_profile_base_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:58:10.661639+00:00"
+    },
+    {
+      "label": "Resourcing Profile Display",
+      "group": "Profile",
+      "url": "https://app-wu.eightfold.ai/integrations/resourcing_profile_display_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/resourcing_profile_display_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:58:26.828646+00:00"
+    },
+    {
+      "label": "Booking Management System",
+      "group": "Core Setup",
+      "url": "https://app-wu.eightfold.ai/integrations/employee_availability_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/employee_availability_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:58:42.943592+00:00"
+    },
+    {
+      "label": "Staffing View",
+      "group": "Core Setup",
+      "url": "https://app-wu.eightfold.ai/integrations/rm_staffing_overview_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/rm_staffing_overview_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:58:59.012850+00:00"
+    },
+    {
+      "label": "Demand Insights",
+      "group": "Core Setup",
+      "url": "https://app-wu.eightfold.ai/integrations/rm_demand_insights_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/rm_demand_insights_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:59:14.941431+00:00"
+    },
+    {
+      "label": "Entity Comments",
+      "group": "Core Setup",
+      "url": "https://app-wu.eightfold.ai/integrations/entity_comments_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/entity_comments_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:59:30.706075+00:00"
+    },
+    {
+      "label": "Talent Design Navbar",
+      "group": "Talent Design",
+      "url": "https://app-wu.eightfold.ai/integrations/navbar_config::JIE",
+      "config_url": "https://app-wu.eightfold.ai/integrations/navbar_config::JIE?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T18:59:47.848820+00:00"
+    },
+    {
+      "label": "Talent Design Branding Config",
+      "group": "Talent Design",
+      "url": "https://app-wu.eightfold.ai/integrations/branding_config::JIE",
+      "config_url": "https://app-wu.eightfold.ai/integrations/branding_config::JIE?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:00:03.699473+00:00"
+    },
+    {
+      "label": "Skills Design",
+      "group": "Talent Design",
+      "url": "https://app-wu.eightfold.ai/integrations/skills_engine_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/skills_engine_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:00:35.953299+00:00"
+    },
+    {
+      "label": "Roles Design",
+      "group": "Talent Design",
+      "url": "https://app-wu.eightfold.ai/integrations/role_library_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/role_library_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:00:52.385433+00:00"
+    },
+    {
+      "label": "Roles Design - Proficiencies",
+      "group": "Talent Design",
+      "url": "https://app-wu.eightfold.ai/integrations/skillproficiency_mapping",
+      "config_url": "https://app-wu.eightfold.ai/integrations/skillproficiency_mapping?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:01:08.567281+00:00"
+    },
+    {
+      "label": "Roles Design - Skills Taxonomy",
+      "group": "Talent Design",
+      "url": "https://app-wu.eightfold.ai/integrations/skills_taxonomy_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/skills_taxonomy_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:01:24.483860+00:00"
+    },
+    {
+      "label": "Forms Library (JSON)",
+      "group": "Feedback & Assessments",
+      "url": "https://app-wu.eightfold.ai/integrations/assessment_templates_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/assessment_templates_config",
+      "mode": "direct",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:02:02.817434+00:00"
+    },
+    {
+      "label": "Question Bank (JSON)",
+      "group": "Feedback & Assessments",
+      "url": "https://app-wu.eightfold.ai/integrations/question_bank_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/question_bank_config",
+      "mode": "direct",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:02:13.063091+00:00"
+    },
+    {
+      "label": "Forms Approval Dashboard",
+      "group": "Feedback & Assessments",
+      "url": "https://app-wu.eightfold.ai/integrations/form_submissions_dashboard_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/form_submissions_dashboard_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:02:29.228528+00:00"
+    },
+    {
+      "label": "Support Notifications",
+      "group": "Support",
+      "url": "https://app-wu.eightfold.ai/integrations/support_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/support_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:02:45.434689+00:00"
+    },
+    {
+      "label": "Support Data Access",
+      "group": "Support",
+      "url": "https://app-wu.eightfold.ai/integrations/support_data_access_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/support_data_access_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:03:01.009022+00:00"
+    },
+    {
+      "label": "Help Center",
+      "group": "Support",
+      "url": "https://app-wu.eightfold.ai/integrations/help_center_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/help_center_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:03:16.746488+00:00"
+    },
+    {
+      "label": "Support help wizard config",
+      "group": "Support",
+      "url": "https://app-wu.eightfold.ai/integrations/support_help_wizard_config",
+      "config_url": "https://app-wu.eightfold.ai/integrations/support_help_wizard_config?tab_id=config_json",
+      "mode": "advanced",
+      "source": "nav",
+      "discovered_at": "2026-01-28T19:03:34.302703+00:00"
+    }
+  ],
+  "visited": [
+    "https://app-wu.eightfold.ai/integrations/additional_domains",
+    "https://app-wu.eightfold.ai/integrations/api_server_config",
+    "https://app-wu.eightfold.ai/integrations/assessment_templates_config",
+    "https://app-wu.eightfold.ai/integrations/ats",
+    "https://app-wu.eightfold.ai/integrations/branding_config::CANDIDATE_EXPERIENCE",
+    "https://app-wu.eightfold.ai/integrations/branding_config::JIE",
+    "https://app-wu.eightfold.ai/integrations/branding_config::PCS",
+    "https://app-wu.eightfold.ai/integrations/branding_config::TALENT_ACQUISITION",
+    "https://app-wu.eightfold.ai/integrations/bulk_action_settings_config",
+    "https://app-wu.eightfold.ai/integrations/calibration_app_config::Demand",
+    "https://app-wu.eightfold.ai/integrations/calibration_config",
+    "https://app-wu.eightfold.ai/integrations/calibration_config::demand_calibration",
+    "https://app-wu.eightfold.ai/integrations/calibration_config::seniority_level",
+    "https://app-wu.eightfold.ai/integrations/candidate_notifications_config::in_app",
+    "https://app-wu.eightfold.ai/integrations/candidate_profile_config",
+    "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee",
+    "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>actions_config>position>data_config>actions>apply_position>additional_data",
+    "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>manager_hrbp_features",
+    "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>map_explorer_config",
+    "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>people",
+    "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>settings_config",
+    "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>team_planning",
+    "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>team_planning>my_team",
+    "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>upskilling",
+    "https://app-wu.eightfold.ai/integrations/career_hub_explore_config::product_configs>employee",
+    "https://app-wu.eightfold.ai/integrations/career_hub_mobileapp_config",
+    "https://app-wu.eightfold.ai/integrations/career_hub_profile_config::product_configs>employee",
+    "https://app-wu.eightfold.ai/integrations/career_hub_projectmarketplace_config::product_configs>employee",
+    "https://app-wu.eightfold.ai/integrations/career_hub_projects_v2_config::product_configs>employee",
+    "https://app-wu.eightfold.ai/integrations/career_navigator_engine_config",
+    "https://app-wu.eightfold.ai/integrations/career_planner_config",
+    "https://app-wu.eightfold.ai/integrations/chatbotx_config",
+    "https://app-wu.eightfold.ai/integrations/community_home_config",
+    "https://app-wu.eightfold.ai/integrations/community_pipeline_config",
+    "https://app-wu.eightfold.ai/integrations/community_workflow_config",
+    "https://app-wu.eightfold.ai/integrations/copilot_config",
+    "https://app-wu.eightfold.ai/integrations/country_region_config",
+    "https://app-wu.eightfold.ai/integrations/custom_fields",
+    "https://app-wu.eightfold.ai/integrations/custom_session_timeout_config",
+    "https://app-wu.eightfold.ai/integrations/data_retention_config",
+    "https://app-wu.eightfold.ai/integrations/data_seeder",
+    "https://app-wu.eightfold.ai/integrations/data_subject_requests",
+    "https://app-wu.eightfold.ai/integrations/dataflow_config",
+    "https://app-wu.eightfold.ai/integrations/demand_workflow_config",
+    "https://app-wu.eightfold.ai/integrations/demands_home_config",
+    "https://app-wu.eightfold.ai/integrations/diversity_config",
+    "https://app-wu.eightfold.ai/integrations/diversity_dashboard_config",
+    "https://app-wu.eightfold.ai/integrations/ef_training_config",
+    "https://app-wu.eightfold.ai/integrations/ekm_config",
+    "https://app-wu.eightfold.ai/integrations/email_config",
+    "https://app-wu.eightfold.ai/integrations/employee_availability_config",
+    "https://app-wu.eightfold.ai/integrations/entity_comments_config",
+    "https://app-wu.eightfold.ai/integrations/extension_config",
+    "https://app-wu.eightfold.ai/integrations/form_submissions_dashboard_config",
+    "https://app-wu.eightfold.ai/integrations/global_search_config",
+    "https://app-wu.eightfold.ai/integrations/help_center_config",
+    "https://app-wu.eightfold.ai/integrations/i18n_override_config",
+    "https://app-wu.eightfold.ai/integrations/ijp_config",
+    "https://app-wu.eightfold.ai/integrations/interview_feedback_config",
+    "https://app-wu.eightfold.ai/integrations/jie_role_operations",
+    "https://app-wu.eightfold.ai/integrations/job_distribution_consolidation_config",
+    "https://app-wu.eightfold.ai/integrations/job_feed_config",
+    "https://app-wu.eightfold.ai/integrations/key_management",
+    "https://app-wu.eightfold.ai/integrations/linkedin_crm_config",
+    "https://app-wu.eightfold.ai/integrations/login_signup_config",
+    "https://app-wu.eightfold.ai/integrations/masking_config",
+    "https://app-wu.eightfold.ai/integrations/messaging_template_variables_config",
+    "https://app-wu.eightfold.ai/integrations/multiple_domains_list",
+    "https://app-wu.eightfold.ai/integrations/navbar_config::CANDIDATE_EXPERIENCE",
+    "https://app-wu.eightfold.ai/integrations/navbar_config::JIE",
+    "https://app-wu.eightfold.ai/integrations/navbar_config::PCS",
+    "https://app-wu.eightfold.ai/integrations/navbar_config::RESOURCE_MANAGEMENT",
+    "https://app-wu.eightfold.ai/integrations/navbar_config::TALENT_ACQUISITION",
+    "https://app-wu.eightfold.ai/integrations/notification_config::product_configs>candidate",
+    "https://app-wu.eightfold.ai/integrations/notification_config::product_configs>employee",
+    "https://app-wu.eightfold.ai/integrations/password_policy_config",
+    "https://app-wu.eightfold.ai/integrations/pcsx_base_config",
+    "https://app-wu.eightfold.ai/integrations/pcsx_search_options_config",
+    "https://app-wu.eightfold.ai/integrations/pipeline_actions_config",
+    "https://app-wu.eightfold.ai/integrations/pipeline_actions_config::demand_pipeline_actions",
+    "https://app-wu.eightfold.ai/integrations/planned_event_config",
+    "https://app-wu.eightfold.ai/integrations/planned_event_custom_fields_config",
+    "https://app-wu.eightfold.ai/integrations/planned_event_home_config",
+    "https://app-wu.eightfold.ai/integrations/planned_event_workflow_config",
+    "https://app-wu.eightfold.ai/integrations/position_base_config",
+    "https://app-wu.eightfold.ai/integrations/position_kanban_config",
+    "https://app-wu.eightfold.ai/integrations/position_overview_config",
+    "https://app-wu.eightfold.ai/integrations/position_overview_config::demand_overview",
+    "https://app-wu.eightfold.ai/integrations/positions_home_config",
+    "https://app-wu.eightfold.ai/integrations/profile_display_config",
+    "https://app-wu.eightfold.ai/integrations/profile_v2_base_config",
+    "https://app-wu.eightfold.ai/integrations/project_marketplace_config",
+    "https://app-wu.eightfold.ai/integrations/project_mp_workflow_config",
+    "https://app-wu.eightfold.ai/integrations/question_bank_config",
+    "https://app-wu.eightfold.ai/integrations/redirect_config",
+    "https://app-wu.eightfold.ai/integrations/referral_config",
+    "https://app-wu.eightfold.ai/integrations/resourcing_config",
+    "https://app-wu.eightfold.ai/integrations/resourcing_profile_base_config",
+    "https://app-wu.eightfold.ai/integrations/resourcing_profile_display_config",
+    "https://app-wu.eightfold.ai/integrations/rm_demand_insights_config",
+    "https://app-wu.eightfold.ai/integrations/rm_homepage_config",
+    "https://app-wu.eightfold.ai/integrations/rm_staffing_overview_config",
+    "https://app-wu.eightfold.ai/integrations/role_library_config",
+    "https://app-wu.eightfold.ai/integrations/role_quality_metrics",
+    "https://app-wu.eightfold.ai/integrations/roles_config",
+    "https://app-wu.eightfold.ai/integrations/rules_config",
+    "https://app-wu.eightfold.ai/integrations/scheduling_config",
+    "https://app-wu.eightfold.ai/integrations/screening_dashboard_config",
+    "https://app-wu.eightfold.ai/integrations/skillproficiency_mapping",
+    "https://app-wu.eightfold.ai/integrations/skills_engine_config",
+    "https://app-wu.eightfold.ai/integrations/skills_taxonomy_config",
+    "https://app-wu.eightfold.ai/integrations/smart_apply_config",
+    "https://app-wu.eightfold.ai/integrations/solr/query",
+    "https://app-wu.eightfold.ai/integrations/sso_config",
+    "https://app-wu.eightfold.ai/integrations/support_config",
+    "https://app-wu.eightfold.ai/integrations/support_data_access_config",
+    "https://app-wu.eightfold.ai/integrations/support_help_wizard_config",
+    "https://app-wu.eightfold.ai/integrations/ta_profile_config",
+    "https://app-wu.eightfold.ai/integrations/tag_config",
+    "https://app-wu.eightfold.ai/integrations/talent_flex_config",
+    "https://app-wu.eightfold.ai/integrations/task_widget_config",
+    "https://app-wu.eightfold.ai/integrations/tenant_management",
+    "https://app-wu.eightfold.ai/integrations/traits_config",
+    "https://app-wu.eightfold.ai/integrations/ui_config",
+    "https://app-wu.eightfold.ai/integrations/user_blocklist_config",
+    "https://app-wu.eightfold.ai/integrations/workflow_config",
+    "https://app-wu.eightfold.ai/workflow_automation/automation_center"
+  ],
+  "skipped": [
+    "https://app-wu.eightfold.ai/integrations/career_hub_base_config::product_configs>employee>actions_config>position>data_config>actions>apply_position>additional_data -> navigation_timeout"
+  ]
+}

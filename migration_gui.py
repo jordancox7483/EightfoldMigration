@@ -34,6 +34,9 @@ from typing import Callable
 
 import custom_field_id_updater
 import custom_fields_scraper
+import config_json_discover
+import config_json_export
+import config_json_scraper
 import dependency_question_id_updater
 import form_and_question_id_updater
 
@@ -106,6 +109,12 @@ class MigrationApp(tk.Tk):
         self.scraper_password_var = tk.StringVar()
         self.scraper_output_dir_var = tk.StringVar()
         self.scraper_output_name_var = tk.StringVar(value="source.csv")
+        self.admin_console_url_var = tk.StringVar(
+            value="https://app-wu.eightfold.ai/integrations"
+        )
+        self.admin_config_output_dir_var = tk.StringVar(
+            value=str(config_json_scraper.DEFAULT_OUTPUT_DIR)
+        )
 
         self.custom_source_csv_var = tk.StringVar()
         self.custom_target_csv_var = tk.StringVar()
@@ -126,6 +135,8 @@ class MigrationApp(tk.Tk):
             "scraper_url": self.scraper_url_var,
             "scraper_output_dir": self.scraper_output_dir_var,
             "scraper_output_name": self.scraper_output_name_var,
+            "admin_console_url": self.admin_console_url_var,
+            "admin_config_output_dir": self.admin_config_output_dir_var,
             "custom_source_csv": self.custom_source_csv_var,
             "custom_target_csv": self.custom_target_csv_var,
             "updated_libraries_dir": self.updated_libraries_dir_var,
@@ -460,6 +471,67 @@ class MigrationApp(tk.Tk):
         )
         row += 1
 
+        ttk.Separator(scroll_frame).grid(row=row, column=0, columnspan=3, sticky="ew", pady=10)
+        row += 1
+
+        ttk.Label(scroll_frame, text="Admin Config Scrape", font=("Segoe UI", 10, "bold")).grid(
+            row=row, column=0, sticky="w", pady=(2, 3)
+        )
+        row += 1
+
+        self._add_labeled_entry(
+            scroll_frame,
+            row,
+            "Admin console start URL",
+            self.admin_console_url_var,
+            width=70,
+            tooltip="Starting URL for discovery (e.g. https://app-wu.eightfold.ai/integrations).",
+        )
+        row += 1
+        self._add_directory_picker(
+            scroll_frame,
+            row,
+            "Config export output folder",
+            self.admin_config_output_dir_var,
+        )
+        row += 1
+
+        ttk.Label(
+            scroll_frame,
+            text=(
+                "Note: Discovery can take a while and only needs to be run the first time "
+                "(or when new admin pages are added). It saves the target list next to the "
+                "app config file."
+            ),
+            wraplength=680,
+            foreground="#555555",
+        ).grid(row=row, column=0, sticky="w", pady=(2, 8))
+        row += 1
+
+        discovery_btn = ttk.Button(
+            scroll_frame,
+            text="Run config discovery (config_json_discover.py)",
+            command=self._trigger_config_discovery,
+        )
+        discovery_btn.grid(row=row, column=0, sticky="w", pady=(4, 2))
+        _Tooltip(
+            discovery_btn,
+            "Builds/updates the config_json_targets.json manifest used by the export step.",
+        )
+        row += 1
+
+        export_btn = ttk.Button(
+            scroll_frame,
+            text="Run config export (config_json_export.py)",
+            command=self._trigger_config_export,
+        )
+        export_btn.grid(row=row, column=0, sticky="w", pady=(4, 6))
+        _Tooltip(
+            export_btn,
+            "Exports JSON configs using the previously discovered target list.",
+        )
+        row += 1
+
         # Log output
         ttk.Label(scroll_frame, text="Activity log", font=("Segoe UI", 10, "bold")).grid(
             row=row, column=0, sticky="w"
@@ -742,6 +814,78 @@ class MigrationApp(tk.Tk):
                 self.append_log("Skipping custom_field_id_updater.py (option disabled).")
 
             self.append_log(f"Final JSON written to {output_json}")
+
+        self._run_in_thread(task)
+
+    def _get_manifest_path(self) -> Path:
+        base_dir = self._config_path.parent if self._config_path else APP_DIR
+        return base_dir / "config_json_targets.json"
+
+    def _trigger_config_discovery(self) -> None:
+        def task() -> None:
+            start_url = self.admin_console_url_var.get().strip()
+            username = self.scraper_username_var.get().strip()
+            password = self.scraper_password_var.get()
+            if not start_url:
+                raise ValueError("Admin console start URL is required.")
+            if not username:
+                raise ValueError("Username is required for config discovery.")
+            if not password:
+                raise ValueError("Password is required for config discovery.")
+
+            output_path = self._get_manifest_path()
+            argv = [
+                "--start-url",
+                start_url,
+                "--username",
+                username,
+                "--password",
+                password,
+                "--output-file",
+                str(output_path),
+                "--resume",
+            ]
+            self.append_log(f"Running config_json_discover.py -> {output_path}")
+            exit_code = self._capture_output(config_json_discover.main, argv)
+            if exit_code not in (0, None):
+                raise RuntimeError(f"config_json_discover.py failed with exit code {exit_code}")
+
+        self._run_in_thread(task)
+
+    def _trigger_config_export(self) -> None:
+        def task() -> None:
+            username = self.scraper_username_var.get().strip()
+            password = self.scraper_password_var.get()
+            if not username:
+                raise ValueError("Username is required for config export.")
+            if not password:
+                raise ValueError("Password is required for config export.")
+
+            manifest_path = self._get_manifest_path()
+            if not manifest_path.exists():
+                raise FileNotFoundError(
+                    f"Manifest file not found: {manifest_path}. Run discovery first."
+                )
+
+            output_dir = self._ensure_directory(
+                "Config export output folder", self.admin_config_output_dir_var.get()
+            )
+
+            argv = [
+                "--targets-file",
+                str(manifest_path),
+                "--username",
+                username,
+                "--password",
+                password,
+                "--output-dir",
+                str(output_dir),
+                "--resume",
+            ]
+            self.append_log("Running config_json_export.py")
+            exit_code = self._capture_output(config_json_export.main, argv)
+            if exit_code not in (0, None):
+                raise RuntimeError(f"config_json_export.py failed with exit code {exit_code}")
 
         self._run_in_thread(task)
 

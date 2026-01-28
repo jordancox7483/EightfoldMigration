@@ -31,7 +31,7 @@ cd EightfoldMigration
 python migration_gui.py
 ```
 
-The window provides five groups of inputs:
+The window provides six groups of inputs:
 
 1. **Core JSON Inputs** – Select the source/target form and question exports and
    the target configuration JSON you want to audit/update.
@@ -53,6 +53,14 @@ The window provides five groups of inputs:
    to copy the selected configuration JSON, apply the ID mapping pass, and then
    rewrite any `custom_field_id` values using the selected CSVs. The output file
    is named `Updated_<original>.json`.
+6. **Admin Config Scrape** - Provide the admin console start URL (default `https://app-wu.eightfold.ai/integrations`), pick an output folder for JSON exports, and use:
+   - **Run config discovery** to build/update `config_json_targets.json` next to
+     the app config file. This can take a while and only needs to be run the
+     first time (or when new admin pages are added).
+   - **Run config export** to export all configs listed in the manifest into the
+     output folder. The action reuses the username/password fields already shown
+     under the Custom Fields Scraper section.
+
 
 All actions emit progress and summary details in the log panel at the bottom of
 the window. Each run is stateless—re-running the same action with new files will
