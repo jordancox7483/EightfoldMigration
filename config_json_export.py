@@ -11,7 +11,8 @@ import argparse
 import getpass
 import json
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple
+from typing import Dict, Iterable, List, Optional, Tuple
+from urllib.parse import parse_qs, urlparse
 
 from playwright.sync_api import (  # type: ignore[import-not-found]
     Error as PlaywrightError,
@@ -23,13 +24,13 @@ from playwright.sync_api import (  # type: ignore[import-not-found]
 from config_json_scraper import (
     DEFAULT_OUTPUT_DIR,
     EDITOR_SELECTORS,
-    build_output_filename,
     extract_text_from_editor,
     locate_config_editor,
     normalize_json_text,
     open_advanced_tab,
     perform_login,
     resolve_headless,
+    sanitize_filename,
     wait_for_page_ready,
     save_debug_artifacts,
 )
@@ -128,6 +129,34 @@ def export_config_from_page(
     return normalized
 
 
+def _build_query_suffix(url: str) -> str:
+    parsed = urlparse(url)
+    params = parse_qs(parsed.query)
+    params.pop("tab_id", None)
+    suffixes: List[str] = []
+    for key in sorted(params):
+        for value in params[key]:
+            if value:
+                suffixes.append(f"{key}={value}")
+    if suffixes:
+        return sanitize_filename("__".join(suffixes))
+    return ""
+
+
+def build_output_filename_for_entry(
+    entry: dict, label_counts: Dict[str, int]
+) -> str:
+    label = (entry.get("label") or "").strip()
+    url = entry.get("config_url") or entry.get("url") or ""
+    base = sanitize_filename(label) if label else sanitize_filename(urlparse(url).path.split("/")[-1] or "config")
+    if label_counts.get(base, 0) <= 1:
+        return f"{base}.json"
+    suffix = _build_query_suffix(url)
+    if not suffix:
+        suffix = sanitize_filename(urlparse(url).path.rstrip("/").split("/")[-1] or "config")
+    return f"{base}__{suffix}.json"
+
+
 def main(argv: Optional[Iterable[str]] = None) -> int:
     args = parse_args(argv)
     username, password = prompt_for_credentials(args)
@@ -140,6 +169,14 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
     if not targets:
         print(f"No targets found in {targets_path}")
         return 1
+
+    label_counts: Dict[str, int] = {}
+    for entry in targets:
+        label = (entry.get("label") or "").strip()
+        if not label:
+            continue
+        base = sanitize_filename(label)
+        label_counts[base] = label_counts.get(base, 0) + 1
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -227,7 +264,7 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
                 skipped.append(f"{page.url} -> no_editor")
                 continue
 
-            filename = build_output_filename(page.url)
+            filename = build_output_filename_for_entry(entry, label_counts)
             destination = output_dir / filename
             if args.resume and destination.exists():
                 skipped.append(f"{page.url} -> already_exported")
